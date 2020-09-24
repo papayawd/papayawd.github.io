@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>z3约束器学习笔记 | Papaya</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="z3约束器学习笔记">
+<meta property="og:url" content="http://example.com/2020/09/25/z3%E7%BA%A6%E6%9D%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Papaya">
+<meta property="og:description" content="​">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-24T16:40:55.000Z">
+<meta property="article:modified_time" content="2020-09-24T16:41:32.763Z">
+<meta property="article:author" content="Papaya">
+<meta property="article:tag" content="re">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Papaya" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://cdn.luogu.com.cn/upload/image_hosting/dapblyfg.png">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>3</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>2</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-z3约束器学习笔记" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/25/z3%E7%BA%A6%E6%9D%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time class="post-time" datetime="2020-09-24T16:40:55.000Z" itemprop="datePublished">
+    <span class="post-month">9月</span><br/>
+    <span class="post-day">25</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      z3约束器学习笔记
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    <a id="more"></a></p>
+<ul>
+<li><h2 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h2></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install z3-solver</span><br></pre></td></tr></table></figure>
+
+<p>或者也可以去github</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;github.com&#x2F;Z3Prover&#x2F;z3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2></li>
+<li><h3 id="申明变量"><a href="#申明变量" class="headerlink" title="申明变量"></a>申明变量</h3></li>
+</ul>
+<p>一，申请 Int对象 语法 “ Int(name) ”  name即对象名字</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x &#x3D; Int(&#39;x&#39;)</span><br></pre></td></tr></table></figure>
+
+<p>　　似乎只能进行加减乘除的约束</p>
+<p>二，申请 位向量 语法“ Bitvex(name,size) ” name为对象名字，size为大小 2^size （这里似乎可以看作是一个约束）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x &#x3D; BitVec(&#39;x&#39;,16)</span><br></pre></td></tr></table></figure>
+
+<p>　　位向量还可以一次性申请多个，类似这样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x,y,z &#x3D; BitVecs(&#39;x y z&#39;,16)</span><br></pre></td></tr></table></figure>
+
+<p>　　等价于</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x &#x3D; BitVec(&#39;x&#39;,16)</span><br><span class="line">y &#x3D; BitVec(&#39;y&#39;,16)</span><br><span class="line">z &#x3D; BitVec(&#39;z&#39;,16)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="创建解的对象"><a href="#创建解的对象" class="headerlink" title="创建解的对象"></a>创建解的对象</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sol &#x3D; Solver()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="添加约束条件"><a href="#添加约束条件" class="headerlink" title="添加约束条件"></a>添加约束条件</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sol.add(约束式子)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sol.check() # 如果返回 sat 则存在解</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="输出解"><a href="#输出解" class="headerlink" title="输出解"></a>输出解</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print sol.model()</span><br></pre></td></tr></table></figure>
+
+<p>　　sol.model() 其实是一个list，可以用我们变量名称作为下标取出里面的值，比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">x &#x3D; Int(&#39;x&#39;)</span><br><span class="line">y &#x3D; Int(&#39;y&#39;)</span><br><span class="line">s &#x3D; Solver()</span><br><span class="line">s.add(x+y &#x3D;&#x3D; 4)</span><br><span class="line">s.add(x &gt; 0)</span><br><span class="line">s.add(y &gt; 0)</span><br><span class="line">if s.check() &#x3D;&#x3D; sat:</span><br><span class="line">    m &#x3D; s.model()</span><br><span class="line">    print m[x]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="多解情况"><a href="#多解情况" class="headerlink" title="多解情况"></a>多解情况</h3></li>
+</ul>
+<p>　　很清晰的思路，直接吧每一次计算出来的解add进入条件，使其不成立</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while s.check() &#x3D;&#x3D; sat:</span><br><span class="line">    m &#x3D; s.model()</span><br><span class="line">    print m</span><br><span class="line">    s.add(Or(x!&#x3D;m[x],y!&#x3D;m[y],z!&#x3D;m[z]))</span><br></pre></td></tr></table></figure>
+
+<p>　　注意这里的Or()，可以理解为不能让里面的式子同时不成立。少了它就相当于</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x!&#x3D;m[x] and y!&#x3D;m[y] and z!&#x3D;m[z]</span><br></pre></td></tr></table></figure>
+
+<p>　　明显就会漏解</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/09/25/z3%E7%BA%A6%E6%9D%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-id="ckfh1p3yi0003ou9k3uuig4se" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/" rel="tag">re</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/09/25/ubuntu16%E4%B8%8B-%E5%92%8Cwindows10%E4%B8%8B-%E7%9A%84angr%E5%AE%89%E8%A3%85%E5%8F%8A%E5%AD%A6%E4%B9%A0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">ubuntu16下 和windows10下 的angr安装及学习</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Papaya</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://cdn.luogu.com.cn/upload/image_hosting/dapblyfg.png">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>3</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>2</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="" target="_blank" title="">
+          
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>友情链接</h2>
+      
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="超强魏姐姐">
+          超强魏姐姐
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2019 - 2020 Papaya<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
