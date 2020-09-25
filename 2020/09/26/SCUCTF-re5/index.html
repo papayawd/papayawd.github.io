@@ -3,26 +3,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>BUU-[RCTF2019]DontEatMe | 欢迎纱布们的到来</title>
+  <title>SCUCTF-re5 | 欢迎纱布们的到来</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="​">
 <meta property="og:type" content="article">
-<meta property="og:title" content="BUU-[RCTF2019]DontEatMe">
-<meta property="og:url" content="http://example.com/2020/09/25/BUU-RCTF2019-DontEatMe/index.html">
+<meta property="og:title" content="SCUCTF-re5">
+<meta property="og:url" content="http://example.com/2020/09/26/SCUCTF-re5/index.html">
 <meta property="og:site_name" content="欢迎纱布们的到来">
 <meta property="og:description" content="​">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/09/25/6Rdy51aUADiHsIv.jpg">
-<meta property="og:image" content="https://i.loli.net/2020/09/25/vLEKcOsYQMJU7Tb.jpg">
-<meta property="og:image" content="https://i.loli.net/2020/09/25/cihs4R17FOTA8ng.jpg">
-<meta property="og:image" content="https://i.loli.net/2020/09/25/XqoOD8LAEYcvdVx.jpg">
-<meta property="og:image" content="https://i.loli.net/2020/09/25/cihs4R17FOTA8ng.jpg">
-<meta property="article:published_time" content="2020-09-25T07:52:54.000Z">
-<meta property="article:modified_time" content="2020-09-25T11:24:28.333Z">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/t8UAVONbGsXgYxj.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/QArjvxgPLXNpDmE.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/YCQL3F41AHxhKku.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/fBrDOUHMzcmtypu.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/BPOCGul8X5cWqvt.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/bkt4iy6PuWOHRnl.jpg">
+<meta property="article:published_time" content="2020-09-25T17:01:52.000Z">
+<meta property="article:modified_time" content="2020-09-25T17:20:43.474Z">
 <meta property="article:author" content="Papaya">
 <meta property="article:tag" content="十月姐姐温柔要求每天一道BUU-re">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/09/25/6Rdy51aUADiHsIv.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2020/09/26/t8UAVONbGsXgYxj.png">
   
     <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
   
@@ -80,12 +81,12 @@
   </div>
 </div>
 
-        <section id="main"><article id="post-BUU-RCTF2019-DontEatMe" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-SCUCTF-re5" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/09/25/BUU-RCTF2019-DontEatMe/" class="article-date">
-  <time class="post-time" datetime="2020-09-25T07:52:54.000Z" itemprop="datePublished">
+    <a href="/2020/09/26/SCUCTF-re5/" class="article-date">
+  <time class="post-time" datetime="2020-09-25T17:01:52.000Z" itemprop="datePublished">
     <span class="post-month">9月</span><br/>
-    <span class="post-day">25</span>
+    <span class="post-day">26</span>
   </time>
 </a>
    
@@ -97,7 +98,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      BUU-[RCTF2019]DontEatMe
+      SCUCTF-re5
     </h1>
   
 
@@ -113,33 +114,32 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>​    <a id="more"></a></p>
-<p>看下面的wsad  和那个判断  应该是一个迷宫</p>
-<p>前边有固定随机种子生成固定的8个数字。然后第一个数字赋值为0</p>
-<p>之后代码内容过于复杂。怀疑是某个加密或者解密</p>
-<p><img src="https://i.loli.net/2020/09/25/6Rdy51aUADiHsIv.jpg"></p>
-<p>这里还🈶️对输入16进制转换  </p>
-<p>百度一下blowfish加密过程</p>
-<p><img src="https://i.loli.net/2020/09/25/vLEKcOsYQMJU7Tb.jpg"></p>
-<p>64位就是8个字符  推测最后的走迷宫的方案长度是8的倍数</p>
-<p>存在反调试  我直接断在调试前  然后修改EIP到调试后</p>
-<p><img src="https://i.loli.net/2020/09/25/cihs4R17FOTA8ng.jpg"></p>
-<p>然后我断在了switch  这时候所有的初始化都弄完了  可以直接dump迷宫和密匙</p>
-<p><img src="https://i.loli.net/2020/09/25/XqoOD8LAEYcvdVx.jpg"></p>
-<p><img src="https://i.loli.net/2020/09/25/cihs4R17FOTA8ng.jpg"></p>
-<p>迷宫如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">000000000111111</span><br><span class="line">011111110111111</span><br><span class="line">011111110111111</span><br><span class="line">01111000e000111</span><br><span class="line">011110111110111</span><br><span class="line">011110111110111</span><br><span class="line">011110000110111</span><br><span class="line">011111110110111</span><br><span class="line">011111110110111</span><br><span class="line">0000s0000110111</span><br><span class="line">111101111110111</span><br><span class="line">111100000000111</span><br><span class="line">111111111111111</span><br><span class="line">111111111111111</span><br><span class="line">111111111111111</span><br></pre></td></tr></table></figure>
-
-<p>由反汇编可知 出发点为 （10，5） 目的地为（4，9）需要在16步以内走完(估计就是16步  手动走一下得到路径</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ddddwwwaaawwwddd</span><br></pre></td></tr></table></figure>
-
-<p>对应前面的加密，刚好16位是8的倍数 不用padding分组blowfish加密  加密后转hex屏凑得到flag</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> blowfish</span><br><span class="line">slover = blowfish.Cipher(<span class="string">b&quot;\x00\x0F\x1A\x01\x35\x3A\x3B\x20&quot;</span>)</span><br><span class="line">s = slover.encrypt_block(<span class="string">b&#x27;ddddwwwa&#x27;</span>) + slover.encrypt_block(<span class="string">b&#x27;aawwwddd&#x27;</span>)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">    flag += hex(i)[<span class="number">2</span>:]</span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+<p><del>不清楚为什么这文件IDA不能远程windows调试，OD和IDA之间切换好麻烦</del></p>
+<p>有两次输入  首先尝试修改第一次输入且不修改第二次输入  得到的结果是一样的  说明第一次输入对结果无影响  只分析第二次输入干了什么就可以了</p>
+<p><img src="https://i.loli.net/2020/09/26/t8UAVONbGsXgYxj.png"></p>
+<p>7CE是一个base64加密 其中表是被换过的 直接动态dump出新表</p>
+<p><img src="https://i.loli.net/2020/09/26/QArjvxgPLXNpDmE.png"></p>
+<p>47C是一个随机生成文件名的函数 不过多分析</p>
+<p>重点是242函数 跟进去看看</p>
+<p><img src="https://i.loli.net/2020/09/26/YCQL3F41AHxhKku.png"></p>
+<p>432里面对table前四位做了修改</p>
+<p><img src="https://i.loli.net/2020/09/26/fBrDOUHMzcmtypu.png"></p>
+<p>314里面循环了256次 很像是rc4构造密匙流 看参数这里的密匙是table被修改后的前四位 储存在Dst中</p>
+<p>rc4加密最后步骤是明文和密匙流异或 而只有3A0里面有异或 跟进去看看</p>
+<p><img src="https://i.loli.net/2020/09/26/BPOCGul8X5cWqvt.png"></p>
+<p>明文没有简单的直接去异或密匙流，但是异或的值由密匙流得到且与明文无关 如图所说我们的密匙是固定的 所有之后的所有值 直到最终异或的值都是固定的 可以动态dump一下</p>
+<p><img src="https://i.loli.net/2020/09/26/bkt4iy6PuWOHRnl.jpg"></p>
+<p>我们先换表解密一下给出的加密字符串 得到长度为29 我们就在这里断29次 记录低8位的值 记作数组number</p>
+<p>解密的大致流程就是</p>
+<p>1.base64换表解密得到串s</p>
+<p>2.s异或dump出来的number数组 得到flag</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">table1 = <span class="string">&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#x27;</span></span><br><span class="line">table2 = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">26</span>):</span><br><span class="line">    table2 += chr(ord(<span class="string">&#x27;A&#x27;</span>) + i)</span><br><span class="line">    table2 += chr(ord(<span class="string">&#x27;a&#x27;</span>) + i)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    table2 += chr(ord(<span class="string">&#x27;0&#x27;</span>) + i)</span><br><span class="line">table2 += <span class="string">&#x27;/&#x27;</span></span><br><span class="line">table2 += <span class="string">&#x27;+&#x27;</span></span><br><span class="line">print(table2)</span><br><span class="line">s = <span class="string">&#x27;T2aNoifxUjIgKYMxKCsHKxAUZsDDGStqwV8Gh3W=&#x27;</span></span><br><span class="line">s = base64.b64decode(s.translate(str.maketrans(table2,table1)))</span><br><span class="line"><span class="keyword">print</span> (s)</span><br><span class="line"><span class="keyword">print</span> (len(s)) <span class="comment"># len = 29</span></span><br><span class="line">a = [<span class="number">0xc8</span>,<span class="number">0x23</span>,<span class="number">0x0f</span>,<span class="number">0x36</span>,<span class="number">0x46</span>,<span class="number">0xa9</span>,<span class="number">0xda</span>,<span class="number">0x76</span>,<span class="number">0x4d</span>,<span class="number">0x20</span>,<span class="number">0x35</span>,<span class="number">0x61</span>,<span class="number">0x0f</span>,<span class="number">0x20</span>,<span class="number">0x3d</span>,<span class="number">0x0d</span>,<span class="number">0xb9</span>,<span class="number">0x46</span>,<span class="number">0xbe</span>,<span class="number">0x62</span>,<span class="number">0xf4</span>,<span class="number">0x57</span>,<span class="number">0x3a</span>,<span class="number">0x95</span>,<span class="number">0xdf</span>,<span class="number">0xc1</span>,<span class="number">0x6b</span>,<span class="number">0x60</span>,<span class="number">0x06</span>]</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">29</span>):</span><br><span class="line">    flag += chr(s[i] ^ a[i])</span><br><span class="line"><span class="keyword">print</span> (flag)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2020/09/25/BUU-RCTF2019-DontEatMe/" data-id="ckfiii6vo00036b9kgaws2gnt" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2020/09/26/SCUCTF-re5/" data-id="ckfiii6vl00016b9kak2sc52k" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%81%E6%9C%88%E5%A7%90%E5%A7%90%E6%B8%A9%E6%9F%94%E8%A6%81%E6%B1%82%E6%AF%8F%E5%A4%A9%E4%B8%80%E9%81%93BUU-re/" rel="tag">十月姐姐温柔要求每天一道BUU-re</a></li></ul>
@@ -150,19 +150,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/09/26/SCUCTF-re5/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          SCUCTF-re5
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/09/25/z3%E7%BA%A6%E6%9D%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/09/25/BUU-RCTF2019-DontEatMe/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">z3约束器学习笔记</div>
+      <div class="article-nav-title">BUU-[RCTF2019]DontEatMe</div>
     </a>
   
 </nav>
