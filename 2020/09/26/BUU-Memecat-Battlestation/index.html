@@ -3,15 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: re | 欢迎纱布们的到来</title>
+  <title>BUU-Memecat Battlestation | 欢迎纱布们的到来</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="欢迎纱布们的到来">
-<meta property="og:url" content="http://example.com/tags/re/index.html">
+  <meta name="description" content="​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUU-Memecat Battlestation">
+<meta property="og:url" content="http://example.com/2020/09/26/BUU-Memecat-Battlestation/index.html">
 <meta property="og:site_name" content="欢迎纱布们的到来">
+<meta property="og:description" content="​">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/hHGZAn4U3Ez6LyM.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/zRFBwuGOMEAh6yV.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/HREMxLkXIJjgsPr.jpg">
+<meta property="article:published_time" content="2020-09-26T07:30:15.000Z">
+<meta property="article:modified_time" content="2020-09-26T07:42:57.332Z">
 <meta property="article:author" content="Papaya">
+<meta property="article:tag" content="十月姐姐温柔要求每天一道BUU-re">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/09/26/hHGZAn4U3Ez6LyM.png">
   
     <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
   
@@ -69,64 +78,79 @@
   </div>
 </div>
 
-        <section id="main">
-  
-  
+        <section id="main"><article id="post-BUU-Memecat-Battlestation" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/26/BUU-Memecat-Battlestation/" class="article-date">
+  <time class="post-time" datetime="2020-09-26T07:30:15.000Z" itemprop="datePublished">
+    <span class="post-month">9月</span><br/>
+    <span class="post-day">26</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
     
     
-      
-      
-      <section class="archives-wrap animated rubberBand">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      BUU-Memecat Battlestation
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
         </div>
-        <div class="archives">
+      </header>
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/09/25/z3%E7%BA%A6%E6%9D%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  <time class="post-time" datetime="2020-09-24T16:40:55.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">25</span>
-  </time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/25/z3%E7%BA%A6%E6%9D%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">z3约束器学习笔记</a>
-    </h1>
-  
+        <p>​    <a id="more"></a></p>
+<p>一个64位的.net平台上的可执行文件  这个游戏还是很有趣的  激光打怪兽？？？</p>
+<p>游戏关卡有两个 第一个是明文比较</p>
+<p><img src="https://i.loli.net/2020/09/26/hHGZAn4U3Ez6LyM.png"></p>
+<p>得到串 RAINBOW</p>
+<p>第二个是异或比较（都好zz 为什么做这个题的人这么少呢</p>
+<p><img src="https://i.loli.net/2020/09/26/zRFBwuGOMEAh6yV.png"></p>
+<p>因为他给的那个反汇编我不会弄出比较的值</p>
+<p>这里直接在最后比较函数那里下端点，dump出最后比较的值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">0x3</span>,<span class="number">0x20</span>,<span class="number">0x26</span>,<span class="number">0x24</span>,<span class="number">0x2d</span>,<span class="number">0x1e</span>,<span class="number">0x2</span>,<span class="number">0x20</span>,<span class="number">0x2f</span>,<span class="number">0x2f</span>,<span class="number">0x2e</span>,<span class="number">0x2f</span>]</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(a)):</span><br><span class="line">    flag += chr(a[i] ^ ord(<span class="string">&#x27;A&#x27;</span>))</span><br><span class="line"><span class="keyword">print</span> flag</span><br></pre></td></tr></table></figure>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/09/25/ubuntu16%E4%B8%8B-%E5%92%8Cwindows10%E4%B8%8B-%E7%9A%84angr%E5%AE%89%E8%A3%85%E5%8F%8A%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  <time class="post-time" datetime="2020-09-24T16:32:26.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">25</span>
-  </time>
-</a>
+<p>得到串 Bagel_Cannon</p>
+<p>闯关成功就得到flag了</p>
+<p><img src="https://i.loli.net/2020/09/26/HREMxLkXIJjgsPr.jpg"></p>
+
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/25/ubuntu16%E4%B8%8B-%E5%92%8Cwindows10%E4%B8%8B-%E7%9A%84angr%E5%AE%89%E8%A3%85%E5%8F%8A%E5%AD%A6%E4%B9%A0/">ubuntu16下 和windows10下 的angr安装及学习</a>
-    </h1>
-  
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/09/26/BUU-Memecat-Battlestation/" data-id="ckfjdb6e70001j39kb4q54dwx" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%81%E6%9C%88%E5%A7%90%E5%A7%90%E6%B8%A9%E6%9F%94%E8%A6%81%E6%B1%82%E6%AF%8F%E5%A4%A9%E4%B8%80%E9%81%93BUU-re/" rel="tag">十月姐姐温柔要求每天一道BUU-re</a></li></ul>
 
-    </header>
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/09/26/SCUCTF-re5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">SCUCTF-re5</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
+
 
 </section>
         
