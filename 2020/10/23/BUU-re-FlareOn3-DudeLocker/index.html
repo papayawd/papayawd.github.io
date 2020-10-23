@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>BUU-re [FlareOn3]DudeLocker | 欢迎纱布们的到来</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="WINAPI yyds 魔鬼一样的API接口 魔鬼一样的各种函数 还好有师傅的exp ​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUU-re [FlareOn3]DudeLocker">
+<meta property="og:url" content="http://example.com/2020/10/23/BUU-re-FlareOn3-DudeLocker/index.html">
+<meta property="og:site_name" content="欢迎纱布们的到来">
+<meta property="og:description" content="WINAPI yyds 魔鬼一样的API接口 魔鬼一样的各种函数 还好有师傅的exp ​">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/23/9ygWfjqXVNoeOmD.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/23/lR2Q6Xjf89xok1T.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/23/efkVw3Sojt61gdr.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/23/7w5yvGXzkdK4thu.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/23/zI5fPsVadDXHTiZ.jpg">
+<meta property="article:published_time" content="2020-10-23T07:40:21.000Z">
+<meta property="article:modified_time" content="2020-10-23T08:37:21.445Z">
+<meta property="article:author" content="Papaya">
+<meta property="article:tag" content="十月姐姐温柔要求每天一道BUU-re">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/23/9ygWfjqXVNoeOmD.png">
+  
+    <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/pig.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>18</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>3</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-BUU-re-FlareOn3-DudeLocker" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/23/BUU-re-FlareOn3-DudeLocker/" class="article-date">
+  <time class="post-time" datetime="2020-10-23T07:40:21.000Z" itemprop="datePublished">
+    <span class="post-month">10月</span><br/>
+    <span class="post-day">23</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      BUU-re [FlareOn3]DudeLocker
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>WINAPI yyds 魔鬼一样的API接口 魔鬼一样的各种函数 还好有师傅的exp</p>
+<p>​    <a id="more"></a></p>
+<p>最终的exp借鉴 n00bzx 师傅</p>
+<p>程序的分析都在<a target="_blank" rel="noopener" href="https://github.com/papayawd/files_used_in_MyBlog/raw/master/DudeLocker.idb">idb</a>文件里了，这里说一下程序的大致流程</p>
+<p>首先是获取了不知道什么路径，然后不知道有什么判断，不妨我们直接动态调试修改进入else：主要代码部分</p>
+<p><img src="https://i.loli.net/2020/10/23/9ygWfjqXVNoeOmD.png"></p>
+<p>接下来是那个xor函数，结果放在了key_data，因为这里用到了v20，v20=v4，v4来自函数040，040返回得非零，进入查看为0x7DAB1D35，这里动态的时候修改eax(返回值)，然后dump出xor后的值</p>
+<p><img src="https://i.loli.net/2020/10/23/lR2Q6Xjf89xok1T.png"></p>
+<p>然后这个值进行sha1加密后 执行了CryptDeriveKey 设置了后边需要用到的phkey</p>
+<p><img src="https://i.loli.net/2020/10/23/efkVw3Sojt61gdr.png"></p>
+<p>后边又获取了某文件的文件名，估计就是给的文件，然后转为小写(businesspapers.doc)</p>
+<p>770函数进行md5加密，并且把结果作为某加密的密匙</p>
+<p>500函数就是那个加密函数</p>
+<p><img src="https://i.loli.net/2020/10/23/7w5yvGXzkdK4thu.png"></p>
+<p>如图，有分组，每次分组大小为0x4000，而且CryptGetKeyParam函数的参数8 查询一下</p>
+<p><img src="https://i.loli.net/2020/10/23/zI5fPsVadDXHTiZ.jpg"></p>
+<p>结合分组加密，判断为DES的CBC加密算法，然后给的BusinessPapers.doc文件听该是加密后的文件。</p>
+<p>最后释放了一个jpg文件不知道是什么意思。。。图片挺好康的</p>
+<p>现在的思路就是先sha1，然后CryptDeriveKey一下phkey，然后md5作为DES CBC的密匙，最后把BusinessPapers.doc文件读出来分组解密，保存到另一个文件里面。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;windef.h&gt;</span></span><br><span class="line">/*</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;businesspapers.doc&quot;</span></span><br><span class="line">md5加密后 设置为DES CBC的key 然后去解密 BusinessPapers.doc文件</span><br><span class="line">文件路径修改一下别出现中文</span><br><span class="line">C:\abc\BusinessPapers.doc</span><br><span class="line">C:\abc\res.doc</span><br><span class="line">  </span><br><span class="line">*/</span><br><span class="line"><span class="comment">#include &lt;windows.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;wincrypt.h&gt;</span></span><br><span class="line">int main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">	int i;</span><br><span class="line">	char* filename = <span class="string">&quot;businesspapers.doc&quot;</span>;</span><br><span class="line">	char* str = <span class="string">&quot;thosefilesreallytiedthefoldertogether&quot;</span>;</span><br><span class="line">	BYTE md5_data[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	BYTE sha1_data[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	DWORD md5_len = <span class="number">16</span>;</span><br><span class="line">	DWORD sha1_len = <span class="number">20</span>;</span><br><span class="line">	BYTE pbData[<span class="number">4</span>];</span><br><span class="line">	*(DWORD *)pbData = <span class="number">1</span>;</span><br><span class="line">	HCRYPTKEY phKey = <span class="number">0</span>;</span><br><span class="line">	HCRYPTPROV phProv = <span class="number">0</span>;</span><br><span class="line">	HCRYPTHASH phHash = <span class="number">0</span>;</span><br><span class="line">	DWORD NumberOfBytesRead=<span class="number">0</span>;</span><br><span class="line">	HANDLE hFile = <span class="number">0</span>;</span><br><span class="line">	HANDLE  hObject = <span class="number">0</span>;</span><br><span class="line">	BYTE lpBuffer[<span class="number">0x5000</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">	int v18 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span> (!CryptAcquireContextW(&amp;phProv, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x18</span>u,<span class="number">0</span>))</span><br><span class="line">	&#123;</span><br><span class="line">		printf(<span class="string">&quot;wrong1\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	CryptCreateHash(phProv, <span class="number">0x8004</span>u, <span class="number">0</span>, <span class="number">0</span>, &amp;phHash);</span><br><span class="line">	CryptHashData(phHash, (BYTE*)str, <span class="number">37</span>, <span class="number">0</span>);</span><br><span class="line">	CryptGetHashParam(phHash, <span class="number">2</span>u, sha1_data, &amp;sha1_len, <span class="number">0</span>);</span><br><span class="line">	CryptDeriveKey(phProv,<span class="number">0x6610</span>u, phHash, <span class="number">1</span>u, &amp;phKey);</span><br><span class="line">	CryptDestroyHash(phHash);</span><br><span class="line">	</span><br><span class="line">	CryptSetKeyParam(phKey, <span class="number">4</span>u, pbData, <span class="number">0</span>);</span><br><span class="line">	phHash = <span class="number">0</span>;</span><br><span class="line">	CryptCreateHash(phProv, <span class="number">0x8003</span>u, <span class="number">0</span>, <span class="number">0</span>, &amp;phHash);</span><br><span class="line">	CryptHashData(phHash, (BYTE*)filename, strlen(filename), <span class="number">0</span>);</span><br><span class="line">	CryptGetHashParam(phHash, <span class="number">2</span>u, md5_data, &amp;md5_len, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; <span class="number">16</span>;i+=<span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(<span class="string">&quot;%02x&quot;</span>,(DWORD)md5_data[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	printf(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">	//CryptDestroyHash(phHash);</span><br><span class="line">	<span class="keyword">if</span>(!CryptSetKeyParam(phKey, <span class="number">1</span>u, md5_data, <span class="number">0</span>))</span><br><span class="line">	&#123;</span><br><span class="line">		printf(<span class="string">&quot;wrong2\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	hFile = CreateFile(<span class="string">&quot;C:\\abc\\BusinessPapers.doc&quot;</span>, <span class="number">0x80000000</span>, <span class="number">3</span>u, <span class="number">0</span>, <span class="number">3</span>u, <span class="number">0x80</span>u, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span>(hFile == (HANDLE)<span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(<span class="string">&quot;wrong3\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	hObject = CreateFile(<span class="string">&quot;C:\\abc\\res.doc&quot;</span>, <span class="number">0x40000004</span>u, <span class="number">3</span>u, <span class="number">0</span>, <span class="number">3</span>u, <span class="number">0x80</span>u, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span>(hObject == (HANDLE)<span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(<span class="string">&quot;wrong4\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> ( ReadFile(hFile, lpBuffer,<span class="number">0x4000</span>, &amp;NumberOfBytesRead, <span class="number">0</span>) )</span><br><span class="line">    &#123;</span><br><span class="line">		<span class="keyword">if</span> ( NumberOfBytesRead &lt; <span class="number">0x4000</span>) &#123; v18 = <span class="number">1</span>;&#125;</span><br><span class="line">		CryptDecrypt(phKey, <span class="number">0</span>, v18, <span class="number">0</span>, (BYTE *)lpBuffer, &amp;NumberOfBytesRead);</span><br><span class="line">		//CryptEncrypt(phKey, <span class="number">0</span>, v18, <span class="number">0</span>, (BYTE *)lpBuffer, &amp;NumberOfBytesRead, <span class="number">0x4010</span>);</span><br><span class="line">		WriteFile(hObject, lpBuffer, NumberOfBytesRead, &amp;NumberOfBytesRead, <span class="number">0</span>);</span><br><span class="line">		<span class="keyword">if</span> ( v18 )</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">cl0se_t3h_f1le_0n_th1s_0ne@flare-on.com</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+
+<p>文件应该是jpg文件，最终我的res.doc修改一下后缀，打开就有flag</p>
+<p>太难搞了，再次感谢n00bzx师傅</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/10/23/BUU-re-FlareOn3-DudeLocker/" data-id="ckgm068t9000h9swa1ffl4jch" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%81%E6%9C%88%E5%A7%90%E5%A7%90%E6%B8%A9%E6%9F%94%E8%A6%81%E6%B1%82%E6%AF%8F%E5%A4%A9%E4%B8%80%E9%81%93BUU-re/" rel="tag">十月姐姐温柔要求每天一道BUU-re</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/22/BUU-re-BSidesCF-2019-Dribbles/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">BUU-re [BSidesCF 2019]Dribbles</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">欢迎纱布们的到来</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>18</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>3</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="" target="_blank" title="">
+          
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>友情链接</h2>
+      
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="超强魏姐姐">
+          超强魏姐姐
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="小源源师傅">
+          小源源师傅
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="孙神yyds">
+          孙神yyds
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2019 - 2020 Papaya<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">归档</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
