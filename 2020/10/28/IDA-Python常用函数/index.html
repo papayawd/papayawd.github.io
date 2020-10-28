@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>IDA-Python常用函数 | 欢迎纱布们的到来</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDA-Python常用函数">
+<meta property="og:url" content="http://example.com/2020/10/28/IDA-Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="欢迎纱布们的到来">
+<meta property="og:description" content="​">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-28T07:00:06.000Z">
+<meta property="article:modified_time" content="2020-10-28T07:46:14.534Z">
+<meta property="article:author" content="Papaya">
+<meta property="article:tag" content="re">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/pig.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>20</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>3</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-IDA-Python常用函数" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/28/IDA-Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" class="article-date">
+  <time class="post-time" datetime="2020-10-28T07:00:06.000Z" itemprop="datePublished">
+    <span class="post-month">10月</span><br/>
+    <span class="post-day">28</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      IDA-Python常用函数
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    <a id="more"></a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> idc		<span class="comment">#导入头文件</span></span><br></pre></td></tr></table></figure>
+
+<p>以下按功能分类吧</p>
+<h2 id="关于-光标-选择"><a href="#关于-光标-选择" class="headerlink" title="关于 光标/选择"></a>关于 光标/选择</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">idc.ScreenEA()</span><br><span class="line">here()	<span class="comment">#两个函数都获取当前光标所在行的地址</span></span><br><span class="line"></span><br><span class="line">idc.SelStart()</span><br><span class="line">idc.SelEnd()	<span class="comment">#获取选取部分代码的首尾地址</span></span><br><span class="line"><span class="comment">#注意SelEnd得到的是选择结束的下一个地址，可以用PrevHead调整一下end</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="反汇编"><a href="#反汇编" class="headerlink" title="反汇编"></a>反汇编</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">idc.GetDisasm(ea)	<span class="comment">#获取反汇编</span></span><br><span class="line">idc.PrevHead(ea)	<span class="comment">#获取该反汇编语句的 上一个反汇编语句的首地址</span></span><br><span class="line">idc.NextHead(ea)	<span class="comment">#获取该反汇编语句的 下一个反汇编语句的首地址</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="数据类型—获取-patch"><a href="#数据类型—获取-patch" class="headerlink" title="数据类型—获取/patch"></a>数据类型—获取/patch</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">idc.Byte(ea)</span><br><span class="line">idc.Word(ea)</span><br><span class="line">idc.Dword(ea)</span><br><span class="line">idc.Qword(ea)</span><br><span class="line">idc.GetFloat(ea)</span><br><span class="line">idc.GetDouble(ea)	<span class="comment">#以上函数按照数据类型 获取数据(因为不同数据的储存方式不同)</span></span><br><span class="line">idc.PatchByte(ea, value)</span><br><span class="line">idc.PatchWord(ea, value)</span><br><span class="line">idc.PatchDword(ea, value)	<span class="comment">#以上函数按照数据类型 从ea开始 patch数据为value</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查询Search-Find"><a href="#查询Search-Find" class="headerlink" title="查询Search/Find"></a>查询Search/Find</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">idc.FindBinary(ea, flag, searchstr)	<span class="comment">#查询一个Binary串</span></span><br><span class="line"><span class="comment">#参数依次为：起始地址，查询模式，Binary串</span></span><br><span class="line"><span class="comment">#常用的flag属性有：SEARCH_DOWN，SEARCH_UP，SEARCH_NEXT</span></span><br><span class="line"><span class="comment">#不同类型的属性可以用｜表示共用，具体的flags可以查询IDAPython-Book</span></span><br><span class="line"></span><br><span class="line">idc.FindText(ea, flag, <span class="number">0</span>, <span class="number">0</span>, searchstr)	<span class="comment">#查询文本串，flag参数与FindBinary相同</span></span><br><span class="line"><span class="comment">#亲测，FindText无法使用SEARCH_NEXT，所以使用NextHead跳转到下一个，避免重复搜索</span></span><br><span class="line"></span><br><span class="line">idc.FindCode(ea, flag)	<span class="comment">#ea算作起始地址，开始寻找第一个code，flag与上相同</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Get套餐"><a href="#Get套餐" class="headerlink" title="Get套餐"></a>Get套餐</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">idc.SegName(ea)	<span class="comment">#获取该地址所在的段名称</span></span><br><span class="line">idc.GetDisasm(ea)	<span class="comment">#获取反汇编</span></span><br><span class="line">idc.GetMnem(ea)	<span class="comment">#获取反汇编语句的类型  eg：mov</span></span><br><span class="line">idc.GetOpnd(ea,<span class="number">0</span>)	<span class="comment">#获取该汇编指令的第一个参数</span></span><br><span class="line">idc.GetOpnd(ea,<span class="number">1</span>)	<span class="comment">#获取该汇编指令的第二个参数</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">idautils.Functions([st],[ed])	<span class="comment">#st与ed参数不存在时，获取所有函数的首地址，返回一个list</span></span><br><span class="line"><span class="comment">#st与ed参数存在时，获取该范围内所有函数的首地址</span></span><br><span class="line"></span><br><span class="line">idc.GetFunctionName(ea)	<span class="comment">#获取ea所在函数的函数名</span></span><br><span class="line">idaapi.get_func(ea)	<span class="comment">#返回ea所在的函数(class类型)，类似一个句柄</span></span><br><span class="line">dir(<span class="class"><span class="keyword">class</span>)	#用于获取上一个函数返回类型里面，可用的函数</span></span><br><span class="line"><span class="class"><span class="title">idc</span>.<span class="title">NextFunction</span>(<span class="params">ea</span>)	#获取<span class="title">ea</span>所在函数的下一个函数的首地址</span></span><br><span class="line"><span class="class"><span class="title">idc</span>.<span class="title">PrevFunction</span>(<span class="params">ea</span>)	#获取<span class="title">ea</span>所在函数的上一个函数的首地址</span></span><br><span class="line"><span class="class"><span class="title">idc</span>.<span class="title">GetFunctionFlags</span>(<span class="params">ea</span>)	#获取该函数的属性</span></span><br><span class="line"><span class="class">#可以查询<span class="title">IDAPython</span>-<span class="title">Book</span>了解其属性</span></span><br><span class="line"><span class="class"><span class="title">idautils</span>.<span class="title">FuncItems</span>(<span class="params">ea</span>)	#返回值为某个生成器</span></span><br><span class="line"><span class="class">#可以使用<span class="title">list</span>(<span class="params">ret_val</span>)得到<span class="title">ea</span>所在函数内，所有反汇编语句的首地址</span></span><br><span class="line"><span class="class"></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="交叉引用"><a href="#交叉引用" class="headerlink" title="交叉引用"></a>交叉引用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">idautils.CodeRefsTo(ea)	<span class="comment">#交叉引用，返回调用ea的地方 相当于Ctrl+X</span></span><br><span class="line">idautisl.CodeRefsFrom(ea)	<span class="comment">#交叉引用，返回被ea调用的地方 也是双击跳转的位置</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">idc.LocByName(str)	<span class="comment">#通过API函数名，获取函数首地址</span></span><br><span class="line">Names()	<span class="comment">#获取所有API的地址和Name (addr,str_name)</span></span><br><span class="line">idautils.DataRefsTo(ea)	<span class="comment">#数据的交叉引用 Ctrl+X</span></span><br><span class="line">idautils.DataRefsFrom(ea)	<span class="comment">#数据的交叉引用 ，双击跳转的位置</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/10/28/IDA-Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" data-id="ckgt3ih3o000pdcca3ak71abe" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/" rel="tag">re</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/23/BUU-Zer0pts2020-QR-Puzzle/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">BUU-re [Zer0pts2020]QR Puzzle</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">欢迎纱布们的到来</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>20</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>3</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="" target="_blank" title="">
+          
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>友情链接</h2>
+      
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="超强魏姐姐">
+          超强魏姐姐
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="小源源师傅">
+          小源源师傅
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="孙神yyds">
+          孙神yyds
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2019 - 2020 Papaya<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">归档</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
