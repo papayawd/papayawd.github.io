@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ByteCTF re-CrackMe | 欢迎纱布们的到来</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="比赛的时候已经知道怎么爆破了，结果用了python+常见字典。。。直接入坟 ​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ByteCTF re-CrackMe">
+<meta property="og:url" content="http://example.com/2020/10/29/ByteCTF-re-CrackMe/index.html">
+<meta property="og:site_name" content="欢迎纱布们的到来">
+<meta property="og:description" content="比赛的时候已经知道怎么爆破了，结果用了python+常见字典。。。直接入坟 ​">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/29/Y3Aezc17qxpKCBg.png">
+<meta property="article:published_time" content="2020-10-29T09:20:26.000Z">
+<meta property="article:modified_time" content="2020-10-29T09:42:13.660Z">
+<meta property="article:author" content="Papaya">
+<meta property="article:tag" content="十月姐姐温柔要求RE复现计划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/29/Y3Aezc17qxpKCBg.png">
+  
+    <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/pig.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>21</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>4</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-ByteCTF-re-CrackMe" class="wow slideInRight article article-type-post"
+  itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/29/ByteCTF-re-CrackMe/" class="article-date">
+  <time class="post-time" datetime="2020-10-29T09:20:26.000Z" itemprop="datePublished">
+    <span class="post-month">10月</span><br/>
+    <span class="post-day">29</span>
+  </time>
+</a>
+
+  </div>
+  <div class="article-inner">
+    
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      ByteCTF re-CrackMe
+    </h1>
+  
+
+      <div>
+        
+        
+        
+
+        
+      </div>
+    </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      <p>比赛的时候已经知道怎么爆破了，结果用了python+常见字典。。。直接入坟</p>
+<p>​    <a id="more"></a></p>
+<p>程序流程是吧passwordsha256加密之后，前半部分作为key，后半部分作为iv，进行AES-CBC加密。</p>
+<p>由hint得知这个sha256是被修改过的，我们进入发现当password长度为32时候触发特殊的sha256</p>
+<p><img src="https://i.loli.net/2020/10/29/Y3Aezc17qxpKCBg.png"></p>
+<p>可以在apk里面验证一下，输入32位的password，前四位固定，后边28为随机，sha256的结果都是一样的。</p>
+<p>这里我们就可以只爆破4位去sha256加密即可。</p>
+<p>sha256的final函数里面 源代码修改一下，使得datalen始终为32，并且正常padding</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//sha256.h</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> SHA256_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SHA256_H</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************** HEADER FILES ***************************/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stddef.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory.h&gt;</span></span></span><br><span class="line"><span class="comment">/****************************** MACROS ******************************/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SHA256_BLOCK_SIZE 32 <span class="comment">// SHA256 outputs a 32 byte digest</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**************************** DATA TYPES ****************************/</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> BYTE; <span class="comment">// 8-bit byte</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> WORD;  <span class="comment">// 32-bit word, change to &quot;long&quot; for 16-bit machines</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    BYTE data[<span class="number">64</span>];             <span class="comment">// current 512-bit chunk of message data, just like a buffer</span></span><br><span class="line">    WORD datalen;              <span class="comment">// sign the data length of current chunk</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> bitlen; <span class="comment">// the bit length of the total message</span></span><br><span class="line">    WORD state[<span class="number">8</span>];             <span class="comment">// store the middle state of hash abstract</span></span><br><span class="line">&#125; SHA256_CTX;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*********************** FUNCTION DECLARATIONS **********************/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ROTLEFT(a, b) (((a) <span class="meta-string">&lt;&lt; (b)) | ((a) &gt;&gt; (32 - (b))))</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ROTRIGHT(a, b) (((a) &gt;&gt; (b)) | ((a) &lt;&lt; (32 - (b))))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CH(x, y, z) (((x) &amp; (y)) ^ (~(x) &amp; (z)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAJ(x, y, z) (((x) &amp; (y)) ^ ((x) &amp; (z)) ^ ((y) &amp; (z)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> EP0(x) (ROTRIGHT(x, 2) ^ ROTRIGHT(x, 13) ^ ROTRIGHT(x, 22))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> EP1(x) (ROTRIGHT(x, 6) ^ ROTRIGHT(x, 11) ^ ROTRIGHT(x, 25))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG0(x) (ROTRIGHT(x, 7) ^ ROTRIGHT(x, 18) ^ ((x) &gt;&gt; 3))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG1(x) (ROTRIGHT(x, 17) ^ ROTRIGHT(x, 19) ^ ((x) &gt;&gt; 10))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**************************** VARIABLES *****************************/</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> WORD k[<span class="number">64</span>] = &#123;</span><br><span class="line">    <span class="number">0x428a2f98</span>, <span class="number">0x71374491</span>, <span class="number">0xb5c0fbcf</span>, <span class="number">0xe9b5dba5</span>, <span class="number">0x3956c25b</span>, <span class="number">0x59f111f1</span>, <span class="number">0x923f82a4</span>, <span class="number">0xab1c5ed5</span>,</span><br><span class="line">    <span class="number">0xd807aa98</span>, <span class="number">0x12835b01</span>, <span class="number">0x243185be</span>, <span class="number">0x550c7dc3</span>, <span class="number">0x72be5d74</span>, <span class="number">0x80deb1fe</span>, <span class="number">0x9bdc06a7</span>, <span class="number">0xc19bf174</span>,</span><br><span class="line">    <span class="number">0xe49b69c1</span>, <span class="number">0xefbe4786</span>, <span class="number">0x0fc19dc6</span>, <span class="number">0x240ca1cc</span>, <span class="number">0x2de92c6f</span>, <span class="number">0x4a7484aa</span>, <span class="number">0x5cb0a9dc</span>, <span class="number">0x76f988da</span>,</span><br><span class="line">    <span class="number">0x983e5152</span>, <span class="number">0xa831c66d</span>, <span class="number">0xb00327c8</span>, <span class="number">0xbf597fc7</span>, <span class="number">0xc6e00bf3</span>, <span class="number">0xd5a79147</span>, <span class="number">0x06ca6351</span>, <span class="number">0x14292967</span>,</span><br><span class="line">    <span class="number">0x27b70a85</span>, <span class="number">0x2e1b2138</span>, <span class="number">0x4d2c6dfc</span>, <span class="number">0x53380d13</span>, <span class="number">0x650a7354</span>, <span class="number">0x766a0abb</span>, <span class="number">0x81c2c92e</span>, <span class="number">0x92722c85</span>,</span><br><span class="line">    <span class="number">0xa2bfe8a1</span>, <span class="number">0xa81a664b</span>, <span class="number">0xc24b8b70</span>, <span class="number">0xc76c51a3</span>, <span class="number">0xd192e819</span>, <span class="number">0xd6990624</span>, <span class="number">0xf40e3585</span>, <span class="number">0x106aa070</span>,</span><br><span class="line">    <span class="number">0x19a4c116</span>, <span class="number">0x1e376c08</span>, <span class="number">0x2748774c</span>, <span class="number">0x34b0bcb5</span>, <span class="number">0x391c0cb3</span>, <span class="number">0x4ed8aa4a</span>, <span class="number">0x5b9cca4f</span>, <span class="number">0x682e6ff3</span>,</span><br><span class="line">    <span class="number">0x748f82ee</span>, <span class="number">0x78a5636f</span>, <span class="number">0x84c87814</span>, <span class="number">0x8cc70208</span>, <span class="number">0x90befffa</span>, <span class="number">0xa4506ceb</span>, <span class="number">0xbef9a3f7</span>, <span class="number">0xc67178f2</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*********************** FUNCTION DEFINITIONS ***********************/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sha256_transform</span><span class="params">(SHA256_CTX *ctx, <span class="keyword">const</span> BYTE data[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    WORD a, b, c, d, e, f, g, h, i, j, t1, t2, m[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialization</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>, j = <span class="number">0</span>; i &lt; <span class="number">16</span>; ++i, j += <span class="number">4</span>)</span><br><span class="line">        m[i] = (data[j] &lt;&lt; <span class="number">24</span>) | (data[j + <span class="number">1</span>] &lt;&lt; <span class="number">16</span>) | (data[j + <span class="number">2</span>] &lt;&lt; <span class="number">8</span>) | (data[j + <span class="number">3</span>]);</span><br><span class="line">    <span class="keyword">for</span> (; i &lt; <span class="number">64</span>; ++i)</span><br><span class="line">        m[i] = SIG1(m[i - <span class="number">2</span>]) + m[i - <span class="number">7</span>] + SIG0(m[i - <span class="number">15</span>]) + m[i - <span class="number">16</span>];</span><br><span class="line"></span><br><span class="line">    a = ctx-&gt;state[<span class="number">0</span>];</span><br><span class="line">    b = ctx-&gt;state[<span class="number">1</span>];</span><br><span class="line">    c = ctx-&gt;state[<span class="number">2</span>];</span><br><span class="line">    d = ctx-&gt;state[<span class="number">3</span>];</span><br><span class="line">    e = ctx-&gt;state[<span class="number">4</span>];</span><br><span class="line">    f = ctx-&gt;state[<span class="number">5</span>];</span><br><span class="line">    g = ctx-&gt;state[<span class="number">6</span>];</span><br><span class="line">    h = ctx-&gt;state[<span class="number">7</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">64</span>; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        t1 = h + EP1(e) + CH(e, f, g) + k[i] + m[i];</span><br><span class="line">        t2 = EP0(a) + MAJ(a, b, c);</span><br><span class="line">        h = g;</span><br><span class="line">        g = f;</span><br><span class="line">        f = e;</span><br><span class="line">        e = d + t1;</span><br><span class="line">        d = c;</span><br><span class="line">        c = b;</span><br><span class="line">        b = a;</span><br><span class="line">        a = t1 + t2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ctx-&gt;state[<span class="number">0</span>] += a;</span><br><span class="line">    ctx-&gt;state[<span class="number">1</span>] += b;</span><br><span class="line">    ctx-&gt;state[<span class="number">2</span>] += c;</span><br><span class="line">    ctx-&gt;state[<span class="number">3</span>] += d;</span><br><span class="line">    ctx-&gt;state[<span class="number">4</span>] += e;</span><br><span class="line">    ctx-&gt;state[<span class="number">5</span>] += f;</span><br><span class="line">    ctx-&gt;state[<span class="number">6</span>] += g;</span><br><span class="line">    ctx-&gt;state[<span class="number">7</span>] += h;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sha256_init</span><span class="params">(SHA256_CTX *ctx)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ctx-&gt;datalen = <span class="number">0</span>;</span><br><span class="line">    ctx-&gt;bitlen = <span class="number">0</span>;</span><br><span class="line">    ctx-&gt;state[<span class="number">0</span>] = <span class="number">0x6a09e667</span>;</span><br><span class="line">    ctx-&gt;state[<span class="number">1</span>] = <span class="number">0xbb67ae85</span>;</span><br><span class="line">    ctx-&gt;state[<span class="number">2</span>] = <span class="number">0x3c6ef372</span>;</span><br><span class="line">    ctx-&gt;state[<span class="number">3</span>] = <span class="number">0xa54ff53a</span>;</span><br><span class="line">    ctx-&gt;state[<span class="number">4</span>] = <span class="number">0x510e527f</span>;</span><br><span class="line">    ctx-&gt;state[<span class="number">5</span>] = <span class="number">0x9b05688c</span>;</span><br><span class="line">    ctx-&gt;state[<span class="number">6</span>] = <span class="number">0x1f83d9ab</span>;</span><br><span class="line">    ctx-&gt;state[<span class="number">7</span>] = <span class="number">0x5be0cd19</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sha256_update</span><span class="params">(SHA256_CTX *ctx, <span class="keyword">const</span> BYTE data[], <span class="keyword">size_t</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    WORD i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        ctx-&gt;data[ctx-&gt;datalen] = data[i];</span><br><span class="line">        ctx-&gt;datalen++;</span><br><span class="line">        <span class="keyword">if</span> (ctx-&gt;datalen == <span class="number">64</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 64 byte = 512 bit  means the buffer ctx-&gt;data has fully stored one chunk of message</span></span><br><span class="line">            <span class="comment">// so do the sha256 hash map for the current chunk</span></span><br><span class="line">            sha256_transform(ctx, ctx-&gt;data);</span><br><span class="line">            ctx-&gt;bitlen += <span class="number">512</span>;</span><br><span class="line">            ctx-&gt;datalen = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sha256_final</span><span class="params">(SHA256_CTX *ctx, BYTE hash[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    WORD i;</span><br><span class="line"></span><br><span class="line">    i = ctx-&gt;datalen;</span><br><span class="line">  	ctx-&gt;datalen = <span class="number">32</span> <span class="comment">//这行是新加的</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Pad whatever data is left in the buffer.</span></span><br><span class="line">    <span class="keyword">if</span> (i &lt; <span class="number">56</span>)       <span class="comment">//  这是修改的代码</span></span><br><span class="line"> <span class="comment">// if (ctx-&gt;datalen &lt; 56)   这是原来的代码</span></span><br><span class="line">    &#123;</span><br><span class="line">        ctx-&gt;data[i++] = <span class="number">0x80</span>; <span class="comment">// pad 10000000 = 0x80</span></span><br><span class="line">        <span class="keyword">while</span> (i &lt; <span class="number">56</span>)</span><br><span class="line">            ctx-&gt;data[i++] = <span class="number">0x00</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ctx-&gt;data[i++] = <span class="number">0x80</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; <span class="number">64</span>)</span><br><span class="line">            ctx-&gt;data[i++] = <span class="number">0x00</span>;</span><br><span class="line">        sha256_transform(ctx, ctx-&gt;data);</span><br><span class="line">        <span class="built_in">memset</span>(ctx-&gt;data, <span class="number">0</span>, <span class="number">56</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Append to the padding the total message&#x27;s length in bits and transform.</span></span><br><span class="line">    ctx-&gt;bitlen += ctx-&gt;datalen * <span class="number">8</span>;</span><br><span class="line">    ctx-&gt;data[<span class="number">63</span>] = ctx-&gt;bitlen;</span><br><span class="line">    ctx-&gt;data[<span class="number">62</span>] = ctx-&gt;bitlen &gt;&gt; <span class="number">8</span>;</span><br><span class="line">    ctx-&gt;data[<span class="number">61</span>] = ctx-&gt;bitlen &gt;&gt; <span class="number">16</span>;</span><br><span class="line">    ctx-&gt;data[<span class="number">60</span>] = ctx-&gt;bitlen &gt;&gt; <span class="number">24</span>;</span><br><span class="line">    ctx-&gt;data[<span class="number">59</span>] = ctx-&gt;bitlen &gt;&gt; <span class="number">32</span>;</span><br><span class="line">    ctx-&gt;data[<span class="number">58</span>] = ctx-&gt;bitlen &gt;&gt; <span class="number">40</span>;</span><br><span class="line">    ctx-&gt;data[<span class="number">57</span>] = ctx-&gt;bitlen &gt;&gt; <span class="number">48</span>;</span><br><span class="line">    ctx-&gt;data[<span class="number">56</span>] = ctx-&gt;bitlen &gt;&gt; <span class="number">56</span>;</span><br><span class="line">    sha256_transform(ctx, ctx-&gt;data);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// copying the final state to the output hash(use big endian).</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        hash[i] = (ctx-&gt;state[<span class="number">0</span>] &gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)) &amp; <span class="number">0x000000ff</span>;</span><br><span class="line">        hash[i + <span class="number">4</span>] = (ctx-&gt;state[<span class="number">1</span>] &gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)) &amp; <span class="number">0x000000ff</span>;</span><br><span class="line">        hash[i + <span class="number">8</span>] = (ctx-&gt;state[<span class="number">2</span>] &gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)) &amp; <span class="number">0x000000ff</span>;</span><br><span class="line">        hash[i + <span class="number">12</span>] = (ctx-&gt;state[<span class="number">3</span>] &gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)) &amp; <span class="number">0x000000ff</span>;</span><br><span class="line">        hash[i + <span class="number">16</span>] = (ctx-&gt;state[<span class="number">4</span>] &gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)) &amp; <span class="number">0x000000ff</span>;</span><br><span class="line">        hash[i + <span class="number">20</span>] = (ctx-&gt;state[<span class="number">5</span>] &gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)) &amp; <span class="number">0x000000ff</span>;</span><br><span class="line">        hash[i + <span class="number">24</span>] = (ctx-&gt;state[<span class="number">6</span>] &gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)) &amp; <span class="number">0x000000ff</span>;</span><br><span class="line">        hash[i + <span class="number">28</span>] = (ctx-&gt;state[<span class="number">7</span>] &gt;&gt; (<span class="number">24</span> - i * <span class="number">8</span>)) &amp; <span class="number">0x000000ff</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// SHA256_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p>爆破程序</p>
+<p>这里学习wp的爆破范围为  0x30～0x7a   但是 0x00～0xff 的爆破时间也是可行的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*************************** HEADER FILES ***************************/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;sha256.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;openssl/aes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> enc [<span class="number">33</span>] =</span><br><span class="line">        &#123;</span><br><span class="line">        <span class="number">0x2d</span>, <span class="number">0x18</span>, <span class="number">0x6a</span>, <span class="number">0x3e</span>, <span class="number">0x17</span>, <span class="number">0x2a</span>, <span class="number">0x14</span>, <span class="number">0x67</span>, <span class="number">0x37</span>, <span class="number">0x89</span>, <span class="number">0xf4</span>, <span class="number">0x99</span>, <span class="number">0xcd</span>, <span class="number">0x6c</span>, <span class="number">0xfb</span>, <span class="number">0xcd</span>,</span><br><span class="line">        <span class="number">0x29</span>, <span class="number">0xb6</span>, <span class="number">0xc7</span>, <span class="number">0x3f</span>, <span class="number">0x4b</span>, <span class="number">0x4a</span>, <span class="number">0x27</span>, <span class="number">0xc2</span>, <span class="number">0x34</span>, <span class="number">0x64</span>, <span class="number">0x77</span>, <span class="number">0x68</span>, <span class="number">0x25</span>, <span class="number">0xaf</span>, <span class="number">0x90</span>, <span class="number">0xb2</span></span><br><span class="line">        &#125;;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> text[] = <span class="string">&quot;2d186a3e172a14673789f499cd6cfbcd29b6c73f4b4a27c23464776825af90b2&quot;</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> encode_data[<span class="number">33</span>];</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> decode_data[<span class="number">33</span>];</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> hash_data[<span class="number">33</span>];</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> key[<span class="number">17</span>];</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> iv[<span class="number">17</span>];</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> buf[<span class="number">33</span>];</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> s[<span class="number">5</span>] = <span class="string">&quot;9hju&quot;</span>;</span><br><span class="line">AES_KEY aes_key;</span><br><span class="line">SHA256_CTX ctx;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetValue</span><span class="params">(<span class="keyword">char</span> ch)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="string">&#x27;0&#x27;</span> &lt;= ch &amp;&amp; ch &lt;= <span class="string">&#x27;9&#x27;</span>)</span><br><span class="line">		<span class="keyword">return</span> ch - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">	<span class="keyword">return</span> ch - <span class="string">&#x27;a&#x27;</span> + <span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HexToStr</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span>* hex,<span class="keyword">unsigned</span> <span class="keyword">char</span>* data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(hex); i += <span class="number">2</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			data[i &gt;&gt; <span class="number">1</span>] = (GetValue(hex[i]) &lt;&lt; <span class="number">4</span> ) + GetValue(hex[i+<span class="number">1</span>]);</span><br><span class="line">		&#125;</span><br><span class="line">	data[<span class="built_in">strlen</span>(hex) &gt;&gt; <span class="number">1</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">StrToHex</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span>* str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">32</span> ; i++)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%02X &quot;</span>,str[i]);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//9hju5555555555555555555555555556</span></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	sha256_init(&amp;ctx);</span></span><br><span class="line"><span class="comment">	sha256_update(&amp;ctx,s,4);</span></span><br><span class="line"><span class="comment">	sha256_final(&amp;ctx, buf);</span></span><br><span class="line"><span class="comment">	StrToHex(buf);</span></span><br><span class="line"><span class="comment">	return 0;</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	HexToStr(text,encode_data);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> c1 = <span class="number">0x30</span>; s[<span class="number">0</span>] = c1, c1 &lt; <span class="number">0x7a</span>; c1++)</span><br><span class="line">		&#123;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> c2 = <span class="number">0x30</span>; s[<span class="number">1</span>] = c2, c2 &lt; <span class="number">0x7a</span>; c2++)</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> c3 = <span class="number">0x30</span>; s[<span class="number">2</span>] = c3, c3 &lt; <span class="number">0x7a</span>; c3++)</span><br><span class="line">					<span class="keyword">for</span>(<span class="keyword">int</span> c4 = <span class="number">0x30</span>; s[<span class="number">3</span>] = c4, c4 &lt; <span class="number">0x7a</span>; c4++)</span><br><span class="line">						&#123;</span><br><span class="line">							sha256_init(&amp;ctx);</span><br><span class="line">							sha256_update(&amp;ctx,s,<span class="number">4</span>);</span><br><span class="line">							sha256_final(&amp;ctx, buf);</span><br><span class="line">							<span class="built_in">memcpy</span>(key, buf, <span class="number">16</span>);</span><br><span class="line">							<span class="built_in">memcpy</span>(iv, &amp;buf[<span class="number">16</span>], <span class="number">16</span>);</span><br><span class="line">							AES_set_decrypt_key(key,<span class="number">128</span>,&amp;aes_key);</span><br><span class="line">							AES_cbc_encrypt(encode_data,decode_data,(<span class="keyword">size_t</span>)<span class="built_in">strlen</span>(encode_data),&amp;aes_key,iv,AES_DECRYPT);</span><br><span class="line">							<span class="comment">//printf(&quot;encode_data : %s\n&quot;,encode_data);</span></span><br><span class="line">							<span class="comment">//printf(&quot;decode_data : %s\n&quot;,decode_data);</span></span><br><span class="line">							<span class="keyword">if</span>(!<span class="built_in">memcmp</span>(<span class="string">&quot;ByteCTF&quot;</span>,decode_data,<span class="number">7</span>))</span><br><span class="line">								&#123;</span><br><span class="line">									<span class="built_in">printf</span>(<span class="string">&quot;_____________________\n&quot;</span>);</span><br><span class="line">									<span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,decode_data);</span><br><span class="line">									<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">								&#125;</span><br><span class="line">						&#125;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;0x%x\n&quot;</span>,c1);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/10/29/ByteCTF-re-CrackMe/" data-id="ckgun3u4a000pk2wbdyps4f6s" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%81%E6%9C%88%E5%A7%90%E5%A7%90%E6%B8%A9%E6%9F%94%E8%A6%81%E6%B1%82RE%E5%A4%8D%E7%8E%B0%E8%AE%A1%E5%88%92/" rel="tag">十月姐姐温柔要求RE复现计划</a></li></ul>
+
+    </footer>
+  </div>
+  
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/28/IDA-Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">IDA-Python常用函数</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">欢迎纱布们的到来</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>21</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>4</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="" target="_blank" title="">
+          
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>友情链接</h2>
+      
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="超强魏姐姐">
+          超强魏姐姐
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="小源源师傅">
+          小源源师傅
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="孙神yyds">
+          孙神yyds
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2019 - 2020 Papaya<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">归档</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
