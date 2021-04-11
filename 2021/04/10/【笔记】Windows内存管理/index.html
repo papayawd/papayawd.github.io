@@ -16,8 +16,9 @@
 <meta property="og:image" content="https://i.loli.net/2021/04/10/Fw6cRekTqnmr75M.png">
 <meta property="og:image" content="https://i.loli.net/2021/04/10/P3nrY8EDXjCy1Ke.png">
 <meta property="og:image" content="https://i.loli.net/2021/04/10/h6D1XAqnuQlC4Lm.png">
+<meta property="og:image" content="https://i.loli.net/2021/04/11/eyUku8lbE7IL9Nm.png">
 <meta property="article:published_time" content="2021-04-10T02:57:36.000Z">
-<meta property="article:modified_time" content="2021-04-10T13:10:27.099Z">
+<meta property="article:modified_time" content="2021-04-11T03:26:00.772Z">
 <meta property="article:author" content="Papaya">
 <meta property="article:tag" content="windows">
 <meta name="twitter:card" content="summary">
@@ -136,9 +137,10 @@
 <p>找到对应的物理地址公式：物理地址 = 页表项 + 4*页内偏移（1 int = 4 byte）</p>
 <p>如果某一虚拟地址被映射过，那么就会被缓存，第二次访问的时候就无需再转译。缓存区域被称为 地址转译快查缓冲区（TLB Translation Look-aside Buffer）。</p>
 <p>【通过windbg双机调试，找目标机上 notepad的内容—-流程  待补】</p>
-<h3 id="段式内存管理"><a href="#段式内存管理" class="headerlink" title="段式内存管理"></a>段式内存管理</h3><p>在段式内存管理中，逻辑地址到线性地址的映射关系也是由索引表和偏移实现的，此外段式内存管理借助了一些段寄存器。段寄存器制定了段选择符，段选择符由：段索引、表指示位、当前特权级 组成。</p>
+<h3 id="段式内存管理"><a href="#段式内存管理" class="headerlink" title="段式内存管理"></a>段式内存管理</h3><p>在段式内存管理中，逻辑地址到线性地址的映射关系也是由索引表和偏移实现的，此外段式内存管理借助了一些段寄存器。段寄存器确定了段选择符，段选择符由：段索引、表指示位、当前特权级 组成。</p>
 <p><img src="https://i.loli.net/2021/04/10/h6D1XAqnuQlC4Lm.png"></p>
-<p>此外还有一个段描述符，段描述符内有：段内最大偏移，基地址，以及其他属性，</p>
+<p>此外还有一个段描述符，段描述符内有：段内最大偏移，基地址，以及其他属性，总共占64位</p>
+<p><img src="https://i.loli.net/2021/04/11/eyUku8lbE7IL9Nm.png" alt="段描述符结构"></p>
 <p>所有段描述符都储存在描述符表中。描述符表又分为 全局描述符表（GDT，Global Descriptor Table）和 局部描述符表（LDT，Local Descriptor Table）。</p>
 <p>到这里就可以解释段选择符的内容了：表指示位决定了所用的描述符表是 GDT 还是 LDT、段索引用于在表中寻找目标段描述符、当前特权级一般只有0或3，0表示内核特权，3表示用户特权。</p>
 <p>通过段选择符找到了目标段描述符，其中的 段基地址 加上 最开始的偏移 就是线性地址了。</p>
@@ -147,12 +149,21 @@
 
 <h3 id="其他-1"><a href="#其他-1" class="headerlink" title="其他"></a>其他</h3><p>两种管理模式都花费了额外的内存空间去储存一些表项，这是典型的以空间换时间的例子。</p>
 <p>windows现在主要是用页式内存管理，但是在某特定场合，段式内存管理是不可或缺的。</p>
-<p>书中提到：“在实际执行指令过程中，每个段寄存器都有一个8byte的缓存，存放了对应于端机岑起的段描述符，如果段寄存器没有改变，则可以跳过查段描述表的步骤，直接在处理器内部计算出线性地址。”  </p>
+<p>段式内存管理可以很好的实现多进程内存管理，比如对于不同进程，操作系统本身的代码段和数据都是全局可见的，可以通过GDT安排访问，而进程内部的代码段和数据是局部可见的，可以通过LDT安排访问，因此每次切换进程的时候只需要切换到对应的LDT即可，实现了进程之间的空间隔离和数据共享。</p>
+<p>书中提到：“在实际执行指令过程中，每个段寄存器内部都有一个8 byte的缓存，存放了对应于段寄存器的段描述符，如果段寄存器没有改变，则可以跳过查段描述表的步骤，直接在处理器内部计算出线性地址。”  但是并没有给出段寄存器具体的说明，百度得到段寄存器的真正结构   8 byte的缓存就是指Base 和 Limit。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span>  <span class="title">Segment</span>&#123;</span></span><br><span class="line">   <span class="keyword">short</span> Select;         <span class="comment">//16位的段选择符  DBG中可见部分</span></span><br><span class="line">   <span class="keyword">short</span> Atrribute;      <span class="comment">//不可见缓冲  16位的段属性</span></span><br><span class="line">   <span class="keyword">int</span> Base;             <span class="comment">//不可见缓冲  32位的段基地址</span></span><br><span class="line">   <span class="keyword">int</span> Limit;            <span class="comment">//不可见缓冲  32位的段的限长</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/04/10/%E3%80%90%E7%AC%94%E8%AE%B0%E3%80%91Windows%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" data-id="cknbswcqt001ecy855nslgef1" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/04/10/%E3%80%90%E7%AC%94%E8%AE%B0%E3%80%91Windows%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" data-id="cknclv43j001gwl852apv5tz8" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
