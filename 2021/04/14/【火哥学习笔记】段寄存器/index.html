@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://i.loli.net/2021/04/14/dETun6J5QbMgZAV.png">
 <meta property="og:image" content="https://i.loli.net/2021/04/14/IYhO6dqVc1SNyTe.png">
 <meta property="article:published_time" content="2021-04-14T00:42:05.000Z">
-<meta property="article:modified_time" content="2021-04-14T02:09:45.756Z">
+<meta property="article:modified_time" content="2021-04-16T05:07:25.941Z">
 <meta property="article:author" content="Papaya">
 <meta property="article:tag" content="windows">
 <meta name="twitter:card" content="summary">
@@ -118,15 +118,15 @@
 
 <h2 id="段选子"><a href="#段选子" class="headerlink" title="段选子"></a>段选子</h2><p><code>Select</code> 是段选择子（段选择符），关于段选子的构造如下</p>
 <p><img src="https://i.loli.net/2021/04/10/h6D1XAqnuQlC4Lm.png"></p>
-<p>高13为是在GDT表或者是LDT表中查找内容的索引(index)，公式为 offset = index*8</p>
-<p>低两位是使用该段寄存器时候的的特权级（<code>RPL</code>）<code>11(b)</code>=3 时为R3特权，<code>00(b)</code>=0 时为R0特权</p>
+<p>高13为是在GDT表或者是LDT表中查找内容的索引(index)，公式为 <code>offset = index*8</code></p>
+<p>低两位是使用该段寄存器时候的的特权级（RPL）<code>11(b)</code>=3 时为R3特权，<code>00(b)</code>=0 时为R0特权</p>
 <p>第3位（index为2）是指示位，为0的时候去GDT表中查，为1的时候去LDT表中查</p>
 <h2 id="段描述符"><a href="#段描述符" class="headerlink" title="段描述符"></a>段描述符</h2><p>剩下的80位不可见的缓存就是根据段选子，在GDT <code>or</code> LDT内查找8 byte的<code>段描述符</code>得到的，以下是段描述符的构造</p>
 <p><img src="https://i.loli.net/2021/04/11/eyUku8lbE7IL9Nm.png" alt="段描述符结构"></p>
 <p>这个构造如此复杂，是因为这个结构是从16位系统拓展过来的（可以发现如果是16位，就只有``base<code>和</code>limit`）</p>
 <h3 id="基地址"><a href="#基地址" class="headerlink" title="基地址"></a>基地址</h3><p>如图，Base 由高32位中的首尾各8位（共2 byte），加上低32位中的高16位（共2 byte）构成一个dword，储存在段寄存器的Base变量中。</p>
-<h3 id="Limit"><a href="#Limit" class="headerlink" title="Limit"></a>Limit</h3><p>如图，可以发现Limit拼凑起来只有20位，但是为了补齐，使用32位的dword储存，放在段寄存器的Limit变量中</p>
-<h3 id="DPL-位"><a href="#DPL-位" class="headerlink" title="DPL 位"></a>DPL 位</h3><p>如图，高32位中的第13，14位是DPL位，该位描述了访问特权级，极端一点需要满足<code>RPL==DPL</code>才可以访问到该段描述符（之后DPL，RPL，CPL的关系会单独说明）</p>
+<h3 id="Limit"><a href="#Limit" class="headerlink" title="Limit"></a>Limit</h3><p>如图，可以发现Limit拼凑起来只有20位，但是为了对齐补齐，使用32位的dword储存，放在段寄存器的Limit变量中</p>
+<h3 id="DPL-位"><a href="#DPL-位" class="headerlink" title="DPL 位"></a>DPL 位</h3><p>如图，高32位中的第13，14位是DPL位，该位描述了访问特权级，需要满足<code>RPL&lt;=DPL</code>才可以访问到该段（之后DPL，RPL，CPL的关系会单独说明）</p>
 <h3 id="P-位"><a href="#P-位" class="headerlink" title="P 位"></a>P 位</h3><p>表示该段是否可用，但是实验。。。（待做实验）</p>
 <h3 id="S-位"><a href="#S-位" class="headerlink" title="S 位"></a>S 位</h3><p>S位为0表示该段是系统段，为1表示该段为普通段（一般是代码数据段）</p>
 <h3 id="TYPE-位"><a href="#TYPE-位" class="headerlink" title="TYPE 位"></a>TYPE 位</h3><p><img src="https://i.loli.net/2021/04/14/dETun6J5QbMgZAV.png"></p>
@@ -134,12 +134,15 @@
 <p>第11位没有很大的用处，可以理解为：为0的时候是Data段，为1的时候是Code段（值小于8，或者大于等于8）</p>
 <p>E位是扩展方向位，为0表示向上扩展—-<code>Base~Limit</code>内部可访问，外部不可访问；为1表示向下扩展，<code>Base~Limit</code>内部不可访问，外部可访问（左侧为向上扩展，右侧为向下扩展，红色为可以访问的部分）</p>
 <p><img src="https://i.loli.net/2021/04/14/IYhO6dqVc1SNyTe.png"></p>
+<p>W位是读写权限位，为0表示只读，为1表示可读可写</p>
+<p>A位是访问位，如果访问过该段描述符，则把该位置为1</p>
 <h3 id="G-位"><a href="#G-位" class="headerlink" title="G 位"></a>G 位</h3><p>粒度（单位1）表示位，为0表示粒度为字节<code>byte</code>，为1表示粒度为一个页<code>4096byte</code>（2^12，加上<code>Limit</code> 2^20 刚好4GB，可以覆盖所有线性地址）</p>
+<h3 id="D-B-位"><a href="#D-B-位" class="headerlink" title="D/B 位"></a>D/B 位</h3><p>当该段是代码段的时候，是D位</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/04/14/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8/" data-id="ckngtig0i001hl0sw075n4w8r" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/04/14/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8/" data-id="cknk7elo2001kwcsw5m2pc7oq" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
@@ -220,16 +223,32 @@
     <div class="friend-link">
       <h2>友情链接</h2>
       
-        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="超强魏姐姐">
-          超强魏姐姐
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="zhiaowei魏姐姐">
+          zhiaowei魏姐姐
         </a>
       
-        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="小源源师傅">
-          小源源师傅
+        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="l0x1c源哥">
+          l0x1c源哥
         </a>
       
-        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="孙神yyds">
-          孙神yyds
+        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="Izaiahsun孙神">
+          Izaiahsun孙神
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://panda0s.top/" target="_blank" title="panda0s无名师傅">
+          panda0s无名师傅
+        </a>
+      
+        <a class="hvr-bounce-in" href="darkeyer.github.io/" target="_blank" title="Darkeyer曦曦哥哥">
+          Darkeyer曦曦哥哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="freek3r.github.io/" target="_blank" title="freek3r艾总">
+          freek3r艾总
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://minhal.me/" target="_blank" title="Minhal学长">
+          Minhal学长
         </a>
       
     </div>
