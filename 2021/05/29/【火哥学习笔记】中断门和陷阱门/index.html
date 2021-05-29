@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【火哥学习笔记】中断门和陷阱门 | 欢迎纱布们的到来</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【火哥学习笔记】中断门和陷阱门">
+<meta property="og:url" content="http://example.com/2021/05/29/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E4%B8%AD%E6%96%AD%E9%97%A8%E5%92%8C%E9%99%B7%E9%98%B1%E9%97%A8/index.html">
+<meta property="og:site_name" content="欢迎纱布们的到来">
+<meta property="og:description" content="​">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/05/29/dcSlm4j7QXYAfeH.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/29/OfncLXIV7JCzyFD.png">
+<meta property="article:published_time" content="2021-05-29T12:14:57.000Z">
+<meta property="article:modified_time" content="2021-05-29T13:00:21.000Z">
+<meta property="article:author" content="Papaya">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/29/dcSlm4j7QXYAfeH.png">
+  
+    <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/pig.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>31</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>5</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-【火哥学习笔记】中断门和陷阱门" class="wow slideInRight article article-type-post"
+  itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/05/29/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E4%B8%AD%E6%96%AD%E9%97%A8%E5%92%8C%E9%99%B7%E9%98%B1%E9%97%A8/" class="article-date">
+  <time class="post-time" datetime="2021-05-29T12:14:57.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">29</span>
+  </time>
+</a>
+
+  </div>
+  <div class="article-inner">
+    
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      【火哥学习笔记】中断门和陷阱门
+    </h1>
+  
+
+      <div>
+        
+        
+        
+
+        
+      </div>
+    </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      <p>​    <a id="more"></a></p>
+<p>中断门和调用门的不同点在于：调用门是从gdt表-&gt;gdt表，而中断门是从idt表-&gt;gdt表</p>
+<p>idt表中的每一个中断门描述符的格式如下图：</p>
+<p><img src="https://i.loli.net/2021/05/29/dcSlm4j7QXYAfeH.png"></p>
+<p>这里使用的int [index] 跳转，其中index就是要在idt表中查询描述符的下标</p>
+<p>其中的TYPE位置 （上边的第8~11位） 为<code>e(h) = 1110(b)</code> 决定了这个描述符的的类型是 中断门</p>
+<p>首尾组合成的段中偏移值就是我们要跳转到的地方</p>
+<p>使用中断门且不提权会先后压入 （eflags、cs、返回地址），提权的话会先后压入（ss、esp、eflags、cs、返回地址）因为提权后的堆栈是R0的，所以要保存下R3的堆栈<code>esp</code>以及其权限<code>ss</code></p>
+<p>中断门使用iretd返回，这里注意iret是16位的，iretd才是32位的，特性和retf差不多，根据具体情况（提权<code>or</code>非提权）出栈</p>
+<p>实验代码如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">idtr=8003f400</span></span><br><span class="line"><span class="comment">gdtr=8003f000</span></span><br><span class="line"><span class="comment">8003f000:  00000000`00000000 00cf9b00`0000ffff</span></span><br><span class="line"><span class="comment">8003f010:  00cf9300`0000ffff 00cffb00`0000ffff</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">我们做以下修改</span></span><br><span class="line"><span class="comment">kd&gt; eq 8003f500 0040ee00`00081005</span></span><br><span class="line"><span class="comment">这里段选择子用的是0x0008，使用gdt表中的第二项为目标段描述符 提权</span></span><br><span class="line"><span class="comment">易知我们的跳转函数地址为0x00401005</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="keyword">int</span> nt_value = <span class="number">0</span>;</span><br><span class="line">__declspec(naked) <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		mov ebx,<span class="number">0x8003f00c</span>;</span><br><span class="line">		mov eax,[ebx];</span><br><span class="line">		mov nt_value,eax;</span><br><span class="line">		iretd;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%X\n&quot;</span>,test);</span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> <span class="number">32</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%X\n&quot;</span>,nt_value);</span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是实验中提权后进入R0时候的堆栈布局</p>
+<p><img src="https://i.loli.net/2021/05/29/OfncLXIV7JCzyFD.png"></p>
+<p>从上往下分别依次是 （返回地址、cs、eflags、esp、ss）</p>
+<p>这里的eflag相对于r3的时候变化了 （r3.eflag = 0x2 , r0.eflag = 0x202） 因为调用中断门的时候会把eflag中的IF位置零，作用是屏蔽掉可屏蔽中断，即一个中断执行的时候其它中断无法执行</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/29/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E4%B8%AD%E6%96%AD%E9%97%A8%E5%92%8C%E9%99%B7%E9%98%B1%E9%97%A8/" data-id="ckp9rtyn5001go785g9ul4c6r" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
+
+    </footer>
+  </div>
+  
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2021/05/29/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%B0%83%E7%94%A8%E9%97%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">【火哥学习笔记】调用门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">欢迎纱布们的到来</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>31</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>5</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="" target="_blank" title="">
+          
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>友情链接</h2>
+      
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="zhiaowei魏姐姐">
+          zhiaowei魏姐姐
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="l0x1c源哥">
+          l0x1c源哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="Izaiahsun孙神">
+          Izaiahsun孙神
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://panda0s.top/" target="_blank" title="panda0s无名师傅">
+          panda0s无名师傅
+        </a>
+      
+        <a class="hvr-bounce-in" href="darkeyer.github.io/" target="_blank" title="Darkeyer曦曦哥哥">
+          Darkeyer曦曦哥哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="freek3r.github.io/" target="_blank" title="freek3r艾总">
+          freek3r艾总
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://minhal.me/" target="_blank" title="Minhal学长">
+          Minhal学长
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2020 - 2021 Papaya<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">归档</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
