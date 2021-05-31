@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://i.loli.net/2021/04/14/dETun6J5QbMgZAV.png">
 <meta property="og:image" content="https://i.loli.net/2021/04/14/IYhO6dqVc1SNyTe.png">
 <meta property="article:published_time" content="2021-04-14T00:42:05.000Z">
-<meta property="article:modified_time" content="2021-04-16T12:28:31.000Z">
+<meta property="article:modified_time" content="2021-05-31T03:03:53.000Z">
 <meta property="article:author" content="Papaya">
 <meta property="article:tag" content="windows">
 <meta name="twitter:card" content="summary">
@@ -128,8 +128,9 @@
 <h3 id="Limit"><a href="#Limit" class="headerlink" title="Limit"></a>Limit</h3><p>如图，可以发现Limit拼凑起来只有20位，但是为了对齐补齐，使用32位的dword储存，放在段寄存器的Limit变量中</p>
 <h3 id="DPL-位"><a href="#DPL-位" class="headerlink" title="DPL 位"></a>DPL 位</h3><p>如图，高32位中的第13，14位是DPL位，该位描述了访问特权级，需要满足<code>RPL&lt;=DPL</code>才可以访问到该段（之后DPL，RPL，CPL的关系会单独说明）</p>
 <h3 id="P-位"><a href="#P-位" class="headerlink" title="P 位"></a>P 位</h3><p>表示该段是否可用，但是实验。。。（待做实验）</p>
-<h3 id="S-位"><a href="#S-位" class="headerlink" title="S 位"></a>S 位</h3><p>S位为0表示该段是系统段，为1表示该段为普通段（一般是代码数据段）</p>
-<h3 id="TYPE-位"><a href="#TYPE-位" class="headerlink" title="TYPE 位"></a>TYPE 位</h3><p><img src="https://i.loli.net/2021/04/14/dETun6J5QbMgZAV.png"></p>
+<h3 id="S-位"><a href="#S-位" class="headerlink" title="S 位"></a>S 位</h3><p>S位为0表示该段是系统段（调用门，任务门，陷阱门，中断门等），为1表示该段为普通段（一般是代码数据段）</p>
+<h3 id="TYPE-位"><a href="#TYPE-位" class="headerlink" title="TYPE 位"></a>TYPE 位</h3><p>这里仅针对S位为1 即代码数据段做解释   S位为0时候的作为门描述符的后文再提</p>
+<p><img src="https://i.loli.net/2021/04/14/dETun6J5QbMgZAV.png"></p>
 <p>TYPE位一共有4位</p>
 <p>第11位没有很大的用处，可以理解为：为0的时候是Data段，为1的时候是Code段（值小于8，或者大于等于8）</p>
 <p>E位是扩展方向位，为0表示向上扩展—-<code>Base~Limit</code>内部可访问，外部不可访问；为1表示向下扩展，<code>Base~Limit</code>内部不可访问，外部可访问（左侧为向上扩展，右侧为向下扩展，红色为可以访问的部分）</p>
@@ -155,7 +156,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/04/14/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8/" data-id="ckpbyjl0z001ins85e5sd71vy" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/04/14/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8/" data-id="ckpcadn6g001euc85eyp3e9og" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
