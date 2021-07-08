@@ -14,7 +14,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://i.loli.net/2021/05/29/Vr7JqHCEs96oLRT.png">
 <meta property="article:published_time" content="2021-05-29T11:09:43.000Z">
-<meta property="article:modified_time" content="2021-05-29T12:50:56.000Z">
+<meta property="article:modified_time" content="2021-07-04T02:31:17.764Z">
 <meta property="article:author" content="Papaya">
 <meta property="article:tag" content="windows">
 <meta name="twitter:card" content="summary">
@@ -50,7 +50,7 @@
     <h2 class="author">Papaya</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>31</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>35</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>5</strong><br>标签</div></a>
     </div>
@@ -116,7 +116,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">char door[] &#x3D; &#123;0,0,0,0,0x48,0&#125;;</span><br><span class="line">__asm</span><br><span class="line">&#123;</span><br><span class="line">	call fword ptr ds:[door];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这里使用的call 通过一个远指针(door)跳转，jmp也可以跳转但是不能提权。此时，描述符就不会被识别为<code>段描述符</code>而是<code>门描述符</code></p>
-<p>其中的TYPE位置为<code>c(h) = 1100(b)</code> 决定了这个描述符的的类型是 调用门</p>
+<p>其中的TYPE位置为<code>c(h) = 1100(c)</code> 决定了这个描述符的的类型是 调用门</p>
 <p>首尾组合成的段中偏移值就是我们要跳转到的地方，即汇编指令中跳转的地址是没有作用的，（上代码中为0）</p>
 <p>使用调用门之后会自动压入当前代码段的CS和返回地址，所以我们不能使用<code>ret</code>而使用<code>retf</code></p>
 <p>此外用调用门的时候还可以携带参数，并且是先push参数，再push CS，再push返回地址，而门描述符中有5bit存放参数个数，意思是最多可以有<code>2^5-1=31</code>个参数，调用代码如下  （此时需要对应修改门描述符中参数个数为2）</p>
@@ -125,7 +125,7 @@
 <p>目标函数中只需要使用<code>retf</code>即可把参数也pop出去，这就是<code>retf</code>的特殊之处了</p>
 <p>使用调用门的时候需要满足以下的权限检查：</p>
 <p>​    [数值上] ① CPL&lt;=调用门描述符DPL，②调用门RPL&lt;=调用门描述符DPL，③当前CPL&gt;=目标代码段描述符DPL</p>
-<p>​    因为检查③的存在 我们可以又当前的R3（CPL=3）跳转到目标的R0（目标代码段描述符DPL=0）去</p>
+<p>​    因为检查③的存在 我们可以由当前的R3（CPL=3）跳转到目标的R0（目标代码段描述符DPL=0）去</p>
 <p>以下是实验代码</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">gdtr=8003f000</span></span><br><span class="line"><span class="comment">8003f000:  00000000`00000000 00cf9b00`0000ffff</span></span><br><span class="line"><span class="comment">8003f010:  00cf9300`0000ffff 00cffb00`0000ffff</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">首先做以下修改</span></span><br><span class="line"><span class="comment">kd&gt; eq 8003f048 0040ec00`000b1005 </span></span><br><span class="line"><span class="comment">这里段选择子用的是0x000b，也就是调用门RPL=3，使用gdt表中的第二项为目标段描述符 </span></span><br><span class="line"><span class="comment">目标段是r0的一个段，DPL=0 满足 ③[数值上] 当前CPL&gt;=目标代码段描述符DPL </span></span><br><span class="line"><span class="comment">调用门描述符的DPL=3 满足① [数值上] CPL&lt;=调用门描述符DPL</span></span><br><span class="line"><span class="comment">易知我们的跳转函数地址为0x00401005</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="keyword">int</span> nt_value = <span class="number">0</span>;</span><br><span class="line">__declspec(naked) <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		mov ebx,<span class="number">0x8003f00c</span>; <span class="comment">// R0的地址 （实际上就是gdt表的第二项前32位）</span></span><br><span class="line">		mov eax,[ebx];</span><br><span class="line">		mov nt_value,eax;</span><br><span class="line">		retf;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> door[] = &#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0x48</span>,<span class="number">0</span>&#125;; </span><br><span class="line">    <span class="comment">// 因为 ②[数值上] 调用门RPL&lt;=调用门描述符DPL  所以这里用0x4b也是能过去的</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%X\n&quot;</span>,test);</span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		call fword ptr ds:[door];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%X\n&quot;</span>,nt_value);</span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -137,7 +137,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/29/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%B0%83%E7%94%A8%E9%97%A8/" data-id="ckpcadn6k001nuc8572fi02cb" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/05/29/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%B0%83%E7%94%A8%E9%97%A8/" data-id="ckquis16c002010swa7vl1t5k" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
@@ -209,7 +209,7 @@
     <h2 class="author">Papaya</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>31</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>35</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>5</strong><br>标签</div></a>
     </div>

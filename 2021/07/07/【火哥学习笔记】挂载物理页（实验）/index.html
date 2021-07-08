@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【火哥学习笔记】挂载物理页（实验） | 欢迎纱布们的到来</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【火哥学习笔记】挂载物理页（实验）">
+<meta property="og:url" content="http://example.com/2021/07/07/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%8C%82%E8%BD%BD%E7%89%A9%E7%90%86%E9%A1%B5%EF%BC%88%E5%AE%9E%E9%AA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="欢迎纱布们的到来">
+<meta property="og:description" content="​">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-07T14:11:04.000Z">
+<meta property="article:modified_time" content="2021-07-07T14:41:16.158Z">
+<meta property="article:author" content="Papaya">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/pig.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>35</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>5</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-【火哥学习笔记】挂载物理页（实验）" class="wow slideInRight article article-type-post"
+  itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/07/07/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%8C%82%E8%BD%BD%E7%89%A9%E7%90%86%E9%A1%B5%EF%BC%88%E5%AE%9E%E9%AA%8C%EF%BC%89/" class="article-date">
+  <time class="post-time" datetime="2021-07-07T14:11:04.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">07</span>
+  </time>
+</a>
+
+  </div>
+  <div class="article-inner">
+    
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      【火哥学习笔记】挂载物理页（实验）
+    </h1>
+  
+
+      <div>
+        
+        
+        
+
+        
+      </div>
+    </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      <p>​    <a id="more"></a></p>
+<p>前置知识：</p>
+<p>为了便于给新的进程挂载物理页，10-10-12分页中，规定了一个线性地址<code>0xc0300000</code>指向的物理地址就是<code>CR3</code>，即<code>PDT</code>表的首地址、<code>Dirbase</code></p>
+<p>我们可以用线性地址<code>0xc0300000</code> 获取<code>PDT</code>表的首地址，还可以用<code>0xc0000000</code> 获取<code>PTT</code>表的首地址</p>
+<p>火哥实验代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="keyword">char</span> shellcode[] = &#123;<span class="number">0x6a</span>,<span class="number">0</span>,<span class="number">0x6a</span>,<span class="number">0</span>,<span class="number">0x6a</span>,<span class="number">0</span>,<span class="number">0x6a</span>,<span class="number">0</span>,<span class="number">0xe8</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0xc3</span>&#125;; </span><br><span class="line"><span class="comment">/* shellcode代码 功能是实现messagebox弹窗</span></span><br><span class="line"><span class="comment">我们的目的就是将线性地址offset1所在的页(也就是0所在的页) 挂载到 shellcode线性地址对应的物理地址上</span></span><br><span class="line"><span class="comment">为什么是offset？ 因为分页机制，一个页为4KB 这里使用的是char申请的静态全局变量，不能保证其就在某一页的首部</span></span><br><span class="line"><span class="comment">				而如果我们使用malloc申请一个0x1000大的空间(刚好一个页) 就可以满足后文的 call 0;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">__declspec(naked) <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		push <span class="number">0x30</span>;</span><br><span class="line">		pop fs;<span class="comment">// fs权限修改 默认R0用0x30段选择子</span></span><br><span class="line">		pushad;</span><br><span class="line">		pushfd;<span class="comment">//保存现场</span></span><br><span class="line"></span><br><span class="line">		lea eax,shellcode;</span><br><span class="line">		mov ebx,dword ptr ds:[<span class="number">0xc0300000</span>];</span><br><span class="line">		test ebx,ebx;</span><br><span class="line">		je __PDE; <span class="comment">// 看一下PTD表第一项的PTE是否存在   不存在的话</span></span><br><span class="line">__PTE:</span><br><span class="line">		shr eax,<span class="number">12</span>;</span><br><span class="line">		<span class="keyword">and</span> eax,<span class="number">0xfffff</span>;</span><br><span class="line">		shl eax,<span class="number">2</span>;</span><br><span class="line">		add eax,<span class="number">0xc0000000</span>;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        这里是比较巧妙的，自己重温的时候写写草稿 </span></span><br><span class="line"><span class="comment">        首先是将shellcode的PDT下标 放置到 新线性地址PTT下标的位置来，然后将 shellcode的PTT下标*4 放置到 新线性地址PTT偏移的位置来</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        ①首先我们查PTD表 偏移为0xc00 通过前置知识我们知道查到的是CR3 结果也就是PDT表首地址</span></span><br><span class="line"><span class="comment">        ②然后&quot;查PTT表&quot;  因为我们存的是shellcode的PDT下标，这里相当于是在查PDT表 但是因为两者计算方式一样，我们得到的是shellcode对应的PTT表首地址</span></span><br><span class="line"><span class="comment">        ③最后&quot;加偏移&quot; 因为我们存的是shellcode的PTT下标*4，所以这里相当于是在查PTT表，我们的得到的是shellcode对应的物理地址</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">		mov eax,[eax];</span><br><span class="line">		mov dword ptr ds:[<span class="number">0xc0000000</span>],eax; </span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        由前置知识可知，线性地址0xc0000000 就是第一项PDE对应的PTT首地址</span></span><br><span class="line"><span class="comment">        然后把物理地址的值取出来 替换线性地址0(与offset同) 对应的PTE </span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">		jmp __ret;</span><br><span class="line">		</span><br><span class="line">__PDE:</span><br><span class="line">		shr eax,<span class="number">22</span>;</span><br><span class="line">		<span class="keyword">and</span> eax,<span class="number">0x3ff</span>;</span><br><span class="line">		shl eax,<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">		add eax,<span class="number">0xc0300000</span>;</span><br><span class="line">		mov eax,[eax];</span><br><span class="line">		mov dword ptr ds:[<span class="number">0xc0300000</span>],eax;</span><br><span class="line">		<span class="comment">/*感觉火哥这里是有问题的 挂了PDE 还要继续挂PTE 不然进入了正确的PTT表但是没有正确的偏移</span></span><br><span class="line"><span class="comment">        自己认为的解决方法是 这里添加一个汇编语句： jmp __PTE; </span></span><br><span class="line"><span class="comment">        但是因为大部分程序第一个PTE都存在，而且强制修改为0要蓝屏，就无法验证对错</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">__ret:</span><br><span class="line">		popfd;</span><br><span class="line">		popad;<span class="comment">//还原现场</span></span><br><span class="line">		retf</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> addr = (<span class="keyword">int</span>)MessageBox;</span><br><span class="line">	<span class="keyword">int</span> offset1 = ((<span class="keyword">int</span>) shellcode) &amp; <span class="number">0xfff</span>;</span><br><span class="line">	*((<span class="keyword">int</span>*)(&amp;shellcode[<span class="number">9</span>])) = addr - (<span class="number">13</span> + offset1);</span><br><span class="line">	<span class="keyword">char</span> buf[<span class="number">6</span>] = &#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0x48</span>,<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;MessageBox:%X   test:%X   shellcode:%X\n&quot;</span>,MessageBox,test,shellcode);</span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		call fword ptr buf;</span><br><span class="line">		push <span class="number">0x3b</span>;</span><br><span class="line">		pop fs;</span><br><span class="line">		mov eax,offset1;</span><br><span class="line">		call eax;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/07/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%8C%82%E8%BD%BD%E7%89%A9%E7%90%86%E9%A1%B5%EF%BC%88%E5%AE%9E%E9%AA%8C%EF%BC%89/" data-id="ckquis168001p10sw4nok05pr" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
+
+    </footer>
+  </div>
+  
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2021/07/06/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">【火哥学习笔记】分页机制</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">欢迎纱布们的到来</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>35</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>5</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="" target="_blank" title="">
+          
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>友情链接</h2>
+      
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="zhiaowei魏姐姐">
+          zhiaowei魏姐姐
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="l0x1c源哥">
+          l0x1c源哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="Izaiahsun孙神">
+          Izaiahsun孙神
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://panda0s.top/" target="_blank" title="panda0s无名师傅">
+          panda0s无名师傅
+        </a>
+      
+        <a class="hvr-bounce-in" href="darkeyer.github.io/" target="_blank" title="Darkeyer曦曦哥哥">
+          Darkeyer曦曦哥哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="freek3r.github.io/" target="_blank" title="freek3r艾总">
+          freek3r艾总
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://minhal.me/" target="_blank" title="Minhal学长">
+          Minhal学长
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2020 - 2021 Papaya<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">归档</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
