@@ -12,17 +12,17 @@
 <meta property="og:site_name" content="欢迎纱布们的到来">
 <meta property="og:description" content="​">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/07/10/picture/QQ%E6%88%AA%E5%9B%BE20210710213837.png">
-<meta property="og:image" content="http://example.com/2021/07/10/picture/QQ%E6%88%AA%E5%9B%BE20210710214712.png">
-<meta property="og:image" content="http://example.com/2021/07/10/picture/QQ%E6%88%AA%E5%9B%BE20210710220454.png">
-<meta property="og:image" content="http://example.com/2021/07/10/picture/QQ%E6%88%AA%E5%9B%BE20210710221224.png">
-<meta property="og:image" content="http://example.com/2021/07/10/picture/QQ%E6%88%AA%E5%9B%BE20210710221914.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/11/WEXzMNaiSbUgR5y.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/11/pK6gfNHIc4ZM5nx.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/11/AjQJn3i5qRpfBZ1.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/11/53emZQbgF1f9478.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/11/lGqCrWEDfewA4gH.png">
 <meta property="article:published_time" content="2021-07-10T14:00:00.000Z">
-<meta property="article:modified_time" content="2021-07-11T07:17:36.914Z">
+<meta property="article:modified_time" content="2021-07-11T10:04:30.457Z">
 <meta property="article:author" content="Papaya">
 <meta property="article:tag" content="windows">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/07/10/picture/QQ%E6%88%AA%E5%9B%BE20210710213837.png">
+<meta name="twitter:image" content="https://i.loli.net/2021/07/11/WEXzMNaiSbUgR5y.png">
   
     <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
   
@@ -118,9 +118,9 @@
 <p>[2-9-9-12 分页](#2-9-9-12 分页)</p>
 <h2 id="10-10-12-分页"><a href="#10-10-12-分页" class="headerlink" title="10-10-12 分页"></a>10-10-12 分页</h2><p>前置知识：线性地址、物理地址、以及文章<code>Windows内存管理概述</code>中的页式内存管理</p>
 <p>对于每一个CUP核都有一个控制寄存器<code>CR3</code>指向了PDT表的首地址，也就是第一项·，之后的关系如下图：</p>
-<p><img src="../picture/QQ%E6%88%AA%E5%9B%BE20210710213837.png"></p>
+<p><img src="https://i.loli.net/2021/07/11/WEXzMNaiSbUgR5y.png"></p>
 <p>其中<code>PDE</code>与<code>PTE</code>详细拆解如下</p>
-<p><img src="../picture/QQ%E6%88%AA%E5%9B%BE20210710214712.png"></p>
+<p><img src="https://i.loli.net/2021/07/11/pK6gfNHIc4ZM5nx.png"></p>
 <p><code>P</code>位：1表示目标页有效，0表示无效。这就需要<code>PDE</code>与<code>PTE</code>的P位同时为1才能访问到目标物理地址</p>
 <p><code>R/W</code>位：0表示可读，1表示可读可写，判断逻辑同P位</p>
 <p><code>U/S</code>位：0表示所有特权级<code>R0~R3</code>可以访问，1表示只有特权级<code>R0~R2</code>可以访问</p>
@@ -140,14 +140,14 @@
 
 <h2 id="2-9-9-12-分页"><a href="#2-9-9-12-分页" class="headerlink" title="2-9-9-12 分页"></a>2-9-9-12 分页</h2><p>2-9-9-12分页中每一个表项都是8字节，<code>CR3</code>寄存器指向了<code>PDPTT</code>表，也就是第一项<code>PDPTE</code>，线性地址到物理地址的方式和10-10-12分页的方法类似，细节有表项大小不同，以及多了一层的寻址。</p>
 <p>2-9-9-12分页方式也使得寻址范围扩大到<code>64G</code>（<code>0xfffffffff</code>  9个f）</p>
-<p><img src="../picture/QQ%E6%88%AA%E5%9B%BE20210710220454.png"></p>
+<p><img src="https://i.loli.net/2021/07/11/AjQJn3i5qRpfBZ1.png"></p>
 <p>而<code>PDE</code>与<code>PTE</code>也有所变化，但是变化都不大</p>
-<p><img src="../picture/QQ%E6%88%AA%E5%9B%BE20210710221224.png"></p>
+<p><img src="https://i.loli.net/2021/07/11/53emZQbgF1f9478.png"></p>
 <p><code>XD</code>标志位：1表示该页数据不可执行（被保护），0表示可执行</p>
 <p>低12位是属性，同10-10-12分页中的属性</p>
 <p>如图可以验证前面所说的寻址范围为<code>2^36 = 0xfffffffff</code> </p>
 <p>此外还有一点特殊的，就是第四张PDT表的前四项又分别指向了<code>PDPTT</code>表的前四项，如图</p>
-<p><img src="../picture/QQ%E6%88%AA%E5%9B%BE20210710221914.png"></p>
+<p><img src="https://i.loli.net/2021/07/11/lGqCrWEDfewA4gH.png"></p>
 <p>根据10-10-12分页对于<code>0xc0300000</code>地址的经验，我们可以推导出来2-9-9-12分页中，</p>
 <p>而我们知道第4项<code>PDPTE</code>指向的<code>PDT</code>表的前4项<code>PDE</code>，又指向了前四个<code>PDPTE</code> 所以</p>
 <p>使用<code>(0xC0000000 + 3*0x200000 + 3*0x1000) = (0xC0603000) + k*8 </code> 就可以获得第<code>k+1</code>项<code>PDPTE</code>的地址</p>
@@ -163,7 +163,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/10/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/" data-id="ckqyv74i0001kggsw7mohe02e" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/07/10/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/" data-id="ckqz17ftw001kwosw8077g54j" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
