@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【火哥学习笔记】句柄表 | 欢迎纱布们的到来</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【火哥学习笔记】句柄表">
+<meta property="og:url" content="http://example.com/2021/08/20/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%8F%A5%E6%9F%84%E8%A1%A8/index.html">
+<meta property="og:site_name" content="欢迎纱布们的到来">
+<meta property="og:description" content="​">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/08/22/2uSHtijnFGcJbOx.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/23/9fA7eGtVT2KLPws.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/23/LMibU6ogSGIT5qA.png">
+<meta property="article:published_time" content="2021-08-20T09:39:25.000Z">
+<meta property="article:modified_time" content="2021-08-24T03:15:22.000Z">
+<meta property="article:author" content="Papaya">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/08/22/2uSHtijnFGcJbOx.png">
+  
+    <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/pig.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>42</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>5</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-【火哥学习笔记】句柄表" class="wow slideInRight article article-type-post"
+  itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/08/20/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%8F%A5%E6%9F%84%E8%A1%A8/" class="article-date">
+  <time class="post-time" datetime="2021-08-20T09:39:25.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">20</span>
+  </time>
+</a>
+
+  </div>
+  <div class="article-inner">
+    
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      【火哥学习笔记】句柄表
+    </h1>
+  
+
+      <div>
+        
+        
+        
+
+        
+      </div>
+    </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      <p>​    <a id="more"></a></p>
+<h2 id="局部句柄表"><a href="#局部句柄表" class="headerlink" title="局部句柄表"></a>局部句柄表</h2><p>局部句柄表是在每个进程中存在的，因为一个进程难免需要用到另一个进程，或者其他非该进程下的线程，或者其他EVENT等结构。但是结构是存在内核空间中的，为了避免在用户层直接误操作修改了内核层的数据导致蓝屏，提出了使用句柄的方法。实际上是现在内核中找到对象，然后放在了进程空间的局部句柄表中，而句柄就是为了在表中找到某个句柄的索引，这个索引是4的倍数对齐的，并且句柄项的大小为8字节，所以最终的索引应该为<code>base + pid/4*8</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;process.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	DWORD PID;</span><br><span class="line">	HWND calc = FindWindow(<span class="literal">NULL</span>,<span class="string">&quot;计算器&quot;</span>); <span class="comment">// 通过窗口名找到窗口进程的PID</span></span><br><span class="line">	GetWindowThreadProcessId(calc,&amp;PID);</span><br><span class="line">	<span class="keyword">if</span>(PID)</span><br><span class="line">	&#123;</span><br><span class="line">		HANDLE pro = OpenProcess(PROCESS_ALL_ACCESS,<span class="literal">false</span>,PID); <span class="comment">// 通过PID打开进程得到句柄</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%x\n&quot;</span>,pro);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/08/22/2uSHtijnFGcJbOx.png"></p>
+<p>然后找test进程地址</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Failed to get VadRoot</span><br><span class="line">PROCESS <span class="number">81f</span>aa020  SessionId: <span class="number">0</span>  Cid: <span class="number">0170</span>    Peb: <span class="number">7f</span>fd8000  ParentCid: <span class="number">03</span>ec</span><br><span class="line">    DirBase: <span class="number">02940300</span>  ObjectTable: e1a57490  HandleCount:  <span class="number">94.</span></span><br><span class="line">    Image: test.exe</span><br></pre></td></tr></table></figure>
+
+<p>局部句柄表结构 在<code>_EPROCESS</code>结构的<code>+0xc4</code>偏移处</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _EPROCESS <span class="number">81f</span>aa020</span><br><span class="line">nt!_EPROCESS</span><br><span class="line">   +<span class="number">0x000</span> Pcb              : _KPROCESS</span><br><span class="line">   +<span class="number">0x06c</span> ProcessLock      : _EX_PUSH_LOCK</span><br><span class="line">   +<span class="number">0x070</span> CreateTime       : _LARGE_INTEGER <span class="number">0x01d7976b</span>`<span class="number">6</span>df590c6</span><br><span class="line">   +<span class="number">0x078</span> ExitTime         : _LARGE_INTEGER <span class="number">0x0</span></span><br><span class="line">   +<span class="number">0x080</span> RundownProtect   : _EX_RUNDOWN_REF</span><br><span class="line">   +<span class="number">0x084</span> UniqueProcessId  : <span class="number">0x00000170</span> Void</span><br><span class="line">   +<span class="number">0x088</span> ActiveProcessLinks : _LIST_ENTRY [ <span class="number">0x805648b8</span> - <span class="number">0x81ee6828</span> ]</span><br><span class="line">   +<span class="number">0x090</span> QuotaUsage       : [<span class="number">3</span>] <span class="number">0x578</span></span><br><span class="line">   +<span class="number">0x09c</span> QuotaPeak        : [<span class="number">3</span>] <span class="number">0x578</span></span><br><span class="line">   +<span class="number">0x0a8</span> CommitCharge     : <span class="number">0x67</span></span><br><span class="line">   +<span class="number">0x0ac</span> PeakVirtualSize  : <span class="number">0xdbc000</span></span><br><span class="line">   +<span class="number">0x0b0</span> VirtualSize      : <span class="number">0xdbc000</span></span><br><span class="line">   +<span class="number">0x0b4</span> SessionProcessLinks : _LIST_ENTRY [ <span class="number">0xf89cd014</span> - <span class="number">0x81ee6854</span> ]</span><br><span class="line">   +<span class="number">0x0bc</span> DebugPort        : <span class="number">0x81ed58d0</span> Void</span><br><span class="line">   +<span class="number">0x0c0</span> ExceptionPort    : <span class="number">0xe1636c78</span> Void</span><br><span class="line">   +<span class="number">0x0c4</span> ObjectTable      : <span class="number">0xe1a57490</span> _HANDLE_TABLE</span><br><span class="line">   +<span class="number">0x0c8</span> Token            : _EX_FAST_REF</span><br></pre></td></tr></table></figure>
+
+<p>继续查看_HANDLE_TABLE结构</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _HANDLE_TABLE <span class="number">0xe1a57490</span></span><br><span class="line">nt!_HANDLE_TABLE</span><br><span class="line">   +<span class="number">0x000</span> TableCode        : <span class="number">0xe11d5000</span> <span class="comment">// 这里就是局部句柄表的表首地址了</span></span><br><span class="line">   +<span class="number">0x004</span> QuotaProcess     : <span class="number">0x81faa020</span> _EPROCESS</span><br><span class="line">   +<span class="number">0x008</span> UniqueProcessId  : <span class="number">0x00000170</span> Void</span><br><span class="line">   +<span class="number">0x00c</span> HandleTableLock  : [<span class="number">4</span>] _EX_PUSH_LOCK</span><br><span class="line">   +<span class="number">0x01c</span> HandleTableList  : _LIST_ENTRY [ <span class="number">0x80565ba8</span> - <span class="number">0xe171e0fc</span> ]</span><br><span class="line">   +<span class="number">0x024</span> HandleContentionEvent : _EX_PUSH_LOCK</span><br><span class="line">   +<span class="number">0x028</span> DebugInfo        : (null) </span><br><span class="line">   +<span class="number">0x02c</span> ExtraInfoPages   : <span class="number">0</span>n0</span><br><span class="line">   +<span class="number">0x030</span> FirstFree        : <span class="number">0x7c8</span></span><br><span class="line">   +<span class="number">0x034</span> LastFree         : <span class="number">0</span></span><br><span class="line">   +<span class="number">0x038</span> NextHandleNeedingPool : <span class="number">0x800</span></span><br><span class="line">   +<span class="number">0x03c</span> HandleCount      : <span class="number">0</span>n94</span><br><span class="line">   +<span class="number">0x040</span> Flags            : <span class="number">0</span></span><br><span class="line">   +<span class="number">0x040</span> StrictFIFO       : <span class="number">0</span>y0</span><br></pre></td></tr></table></figure>
+
+<p>根据计算公式直接找到句柄所在位置</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dq <span class="number">0xe11d5000</span> + <span class="number">7</span>cc / <span class="number">4</span> * <span class="number">8</span></span><br><span class="line">e11d5f98  <span class="number">001f</span>0fff`<span class="number">82238</span>d89 <span class="number">000f</span>01ff`<span class="number">81</span>eecf61 <span class="comment">// 句柄结构一共8字节，高4位是属性，低四位才是对象头地址</span></span><br><span class="line">e11d5fa8  <span class="number">000f</span>037f`<span class="number">81e1</span>cb51 <span class="number">021f</span>0003`<span class="number">82274f</span>01</span><br></pre></td></tr></table></figure>
+
+<p>这个地址是对象头地址，后3位是标志位需要抹去，抹去之后<code>+0x18</code>才是对象实体</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _OBJECT_HEADER <span class="number">82238</span>d88</span><br><span class="line">nt!_OBJECT_HEADER</span><br><span class="line">   +<span class="number">0x000</span> PointerCount     : <span class="number">0</span>n16</span><br><span class="line">   +<span class="number">0x004</span> HandleCount      : <span class="number">0</span>n2</span><br><span class="line">   +<span class="number">0x004</span> NextToFree       : <span class="number">0x00000002</span> Void</span><br><span class="line">   +<span class="number">0x008</span> Type             : <span class="number">0x82350e38</span> _OBJECT_TYPE</span><br><span class="line">   +<span class="number">0x00c</span> NameInfoOffset   : <span class="number">0</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">   +0x00d HandleInfoOffset : 0 &#x27;&#x27;</span><br><span class="line">   +<span class="number">0x00e</span> QuotaInfoOffset  : <span class="number">0</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">   +0x00f Flags            : 0x20 &#x27; &#x27;</span><br><span class="line">   +<span class="number">0x010</span> ObjectCreateInfo : <span class="number">0x820f0318</span> _OBJECT_CREATE_INFORMATION</span><br><span class="line">   +<span class="number">0x010</span> QuotaBlockCharged : <span class="number">0x820f0318</span> Void</span><br><span class="line">   +<span class="number">0x014</span> SecurityDescriptor : <span class="number">0xe17da42c</span> Void</span><br><span class="line">   +<span class="number">0x018</span> Body             : _QUAD <span class="comment">// 这里是对象实体</span></span><br></pre></td></tr></table></figure>
+
+<p>然后<code>_EPROCESS</code>查看可以找到<code>ImageFileName</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _EPROCESS <span class="number">82238</span>d88 + <span class="number">18</span></span><br><span class="line">nt!_EPROCESS</span><br><span class="line">   +<span class="number">0x000</span> Pcb              : _KPROCESS</span><br><span class="line">   +<span class="number">0x06c</span> ProcessLock      : _EX_PUSH_LOCK</span><br><span class="line">   <span class="comment">///... 中间省略</span></span><br><span class="line">   +<span class="number">0x170</span> Session          : <span class="number">0xf89cd000</span> Void</span><br><span class="line">   +<span class="number">0x174</span> ImageFileName    : [<span class="number">16</span>]  <span class="string">&quot;calc.exe&quot;</span> <span class="comment">// 成功</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="全局句柄表"><a href="#全局句柄表" class="headerlink" title="全局句柄表"></a>全局句柄表</h2><p>这个表里面只有进程和线程的句柄，并且所有的进程和线程无论无论是否打开，只要没有被终止，都在这个表中。</p>
+<p>在任务管理器中就有具体的呈现，每个进程和线程都有一个唯一的编号：<code>PID</code>和<code>CID  </code>这两个值其实就是全局句柄表中的索引。</p>
+<p>全局句柄表在内核的一个<code>PspCidTable</code>变量中，是_HANDLE_TABLE结构的地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dd PspCidTable</span><br><span class="line"><span class="number">805649</span>c0  e1003c58 <span class="number">00000002</span> <span class="number">00000000</span> <span class="number">00000000</span></span><br><span class="line"><span class="number">805649</span>d0  <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">00000000</span></span><br></pre></td></tr></table></figure>
+
+<p>之后就可以找到全局句柄表的首地址</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _HANDLE_TABLE e1003c58</span><br><span class="line">nt!_HANDLE_TABLE</span><br><span class="line">   +<span class="number">0x000</span> TableCode        : <span class="number">0xe1005000</span></span><br><span class="line">   +<span class="number">0x004</span> QuotaProcess     : (null) </span><br><span class="line">   +<span class="number">0x008</span> UniqueProcessId  : (null) </span><br><span class="line">   +<span class="number">0x00c</span> HandleTableLock  : [<span class="number">4</span>] _EX_PUSH_LOCK</span><br><span class="line">   +<span class="number">0x01c</span> HandleTableList  : _LIST_ENTRY [ <span class="number">0xe1003c74</span> - <span class="number">0xe1003c74</span> ]</span><br><span class="line">   +<span class="number">0x024</span> HandleContentionEvent : _EX_PUSH_LOCK</span><br><span class="line">   +<span class="number">0x028</span> DebugInfo        : (null) </span><br><span class="line">   +<span class="number">0x02c</span> ExtraInfoPages   : <span class="number">0</span>n0</span><br><span class="line">   +<span class="number">0x030</span> FirstFree        : <span class="number">0x1d0</span></span><br><span class="line">   +<span class="number">0x034</span> LastFree         : <span class="number">0x240</span></span><br><span class="line">   +<span class="number">0x038</span> NextHandleNeedingPool : <span class="number">0x800</span></span><br><span class="line">   +<span class="number">0x03c</span> HandleCount      : <span class="number">0</span>n265</span><br><span class="line">   +<span class="number">0x040</span> Flags            : <span class="number">1</span></span><br><span class="line">   +<span class="number">0x040</span> StrictFIFO       : <span class="number">0</span>y1</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>TableCode</code>是有讲究的，后两位为0的时候只有一层，后两位为1的时候有两层，后两位为2的时候有三层</p>
+<p><img src="https://i.loli.net/2021/08/23/9fA7eGtVT2KLPws.png"></p>
+<p>一层的话就应该装<code>512</code>个句柄（一个<code>table</code>是一个页<code>4bk</code>，一个句柄项8字节），两层的话就是<code>1024*512</code>个句柄，三层的话就是<code>1024*1024*521</code>个句柄。总结一下就是只有最后一层是句柄项，其他层的都是某张表的首地址。</p>
+<p>这里的话是<code>TableCode</code>低两位为0，只有一层，直接找，先查看<code>calc.exe</code>的<code>PID</code>，这里是十进制的</p>
+<p><img src="https://i.loli.net/2021/08/23/LMibU6ogSGIT5qA.png" alt="图片.png"></p>
+<p>然后直接查就行了</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dq <span class="number">0xe1005000</span> + <span class="number">630</span>*<span class="number">2</span></span><br><span class="line">e1005c60  <span class="number">00000000</span>`<span class="number">82238</span>da1 <span class="number">00000000</span>`<span class="number">81</span>ed9ad9</span><br><span class="line">e1005c70  <span class="number">00000000</span>`<span class="number">81f</span>d37c1 <span class="number">00000000</span>`<span class="number">81f</span>5b639</span><br><span class="line"><span class="comment">// 这里82238da1的后三位一样是属性，需要抹掉，但是和局部句柄表不一样的是 这个地址直接是对象实体的首地址</span></span><br><span class="line">kd&gt; dt _EPROCESS <span class="number">82238</span>da0</span><br><span class="line">nt!_EPROCESS</span><br><span class="line">   +<span class="number">0x000</span> Pcb              : _KPROCESS</span><br><span class="line">   +<span class="number">0x06c</span> ProcessLock      : _EX_PUSH_LOCK</span><br><span class="line">	<span class="comment">// ...  省略</span></span><br><span class="line">   +<span class="number">0x170</span> Session          : <span class="number">0xf89cd000</span> Void</span><br><span class="line">   +<span class="number">0x174</span> ImageFileName    : [<span class="number">16</span>]  <span class="string">&quot;calc.exe&quot;</span> <span class="comment">// 成功</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="句柄拆分"><a href="#句柄拆分" class="headerlink" title="句柄拆分"></a>句柄拆分</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">31</span>~<span class="number">21</span>	<span class="number">20</span>~<span class="number">11</span>	<span class="number">10</span>~<span class="number">2</span>	<span class="number">1</span>~<span class="number">0</span></span><br><span class="line">  A		  B		 C		 D</span><br><span class="line"> 一个句柄分为这四个部分</span><br><span class="line"> D是用于判断层数的  并且真正的索引会把这两位右移出去</span><br><span class="line"> 当为一层的时候  ABC一共<span class="number">30</span>位组成index去表中索引(一项<span class="number">8</span>字节)</span><br><span class="line"> 当为两层的时候  AB一共<span class="number">21</span>位组成index索引第一层(一项<span class="number">4</span>字节) C一共<span class="number">9</span>位组成index索引第二层(一项<span class="number">8</span>字节)</span><br><span class="line"> 当为三层的时候  A一共<span class="number">11</span>位组成index索引第一层(一项<span class="number">4</span>字节) B一共<span class="number">10</span>位组成index索引第二层(一项<span class="number">4</span>字节) C一共<span class="number">9</span>位组成index索引第三层(一项<span class="number">8</span>字节)</span><br></pre></td></tr></table></figure>
+
+<h2 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h2><p>内容：用进程句柄表实现反调试</p>
+<p>要求：知道是哪个进程调试我，并且关闭这个调试进程</p>
+<p>目前BUG：可能某个系统进程里面也打开了目标进程，强制关闭系统进程直接蓝屏 ，添加白名单的方式可以解决这个问题但是每次出现的系统进程不一样。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ntddk.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">BOOLEAN FLAG = TRUE;</span><br><span class="line">HANDLE hThread;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOLEAN <span class="title">FindPidTable</span><span class="params">(ULONG Process, <span class="keyword">char</span>* name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	ULONG ObjectTable = *(PULONG)(Process + <span class="number">0xc4</span>);</span><br><span class="line">	ULONG TableCode = *(PULONG)(ObjectTable + <span class="number">0x0</span>);</span><br><span class="line">	<span class="keyword">char</span> white[] = <span class="string">&quot;csrss.exe&quot;</span>;</span><br><span class="line">	<span class="keyword">char</span> white2[] = <span class="string">&quot;explorer.exe&quot;</span>;</span><br><span class="line">	<span class="keyword">if</span> (!<span class="built_in">strncmp</span>(white, (<span class="keyword">char</span>*)(Process + <span class="number">0x174</span>), <span class="built_in">strlen</span>(white)))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (!<span class="built_in">strncmp</span>(white2, (<span class="keyword">char</span>*)(Process + <span class="number">0x174</span>), <span class="built_in">strlen</span>(white2)))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">512</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//DbgPrint(&quot;case[%d]\n&quot;, i);</span></span><br><span class="line">		ULONG value = *(PULONG)(TableCode + i * <span class="number">8</span>);</span><br><span class="line">		<span class="keyword">if</span> (value &lt; <span class="number">0x80000000</span>) <span class="keyword">continue</span>;</span><br><span class="line">		ULONG Pro = (value &amp; <span class="number">0xfffffffc</span>) + <span class="number">0x18</span>;       <span class="comment">// 局部句柄表</span></span><br><span class="line">		<span class="keyword">if</span> (!<span class="built_in">strncmp</span>(name,(<span class="keyword">char</span>*)(Pro + <span class="number">0x174</span>), <span class="built_in">strlen</span>(name)))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">BOOLEAN <span class="title">CloseProcess</span><span class="params">(ULONG Process)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">		思路是枚举PID 然后再全局句柄表里面找，通过进程名对比</span></span><br><span class="line"><span class="comment">		全局句柄表在KPCR里面有</span></span><br><span class="line"><span class="comment">		找到PID之后就可以通过 ZwOpenProcess 得到句柄</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	ULONG PspCidTable;</span><br><span class="line">	_asm</span><br><span class="line">	&#123;</span><br><span class="line">		mov eax, fs: [<span class="number">0x34</span>]</span><br><span class="line">		mov eax, [eax + <span class="number">0x80</span>]</span><br><span class="line">		mov eax, [eax]</span><br><span class="line">		mov eax, [eax]             <span class="comment">//两次取值直接拿首地址 </span></span><br><span class="line">		mov PspCidTable, eax</span><br><span class="line">	&#125;</span><br><span class="line">	DbgPrint(<span class="string">&quot;PspCidTable : %x\n&quot;</span>, PspCidTable);</span><br><span class="line">	ULONG PID = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">0x800</span>; i += <span class="number">4</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		ULONG value = *(PULONG)(PspCidTable + i * <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">if</span> (value &lt; <span class="number">0x80000000</span>) <span class="keyword">continue</span>;</span><br><span class="line">		ULONG Pro = (value &amp; <span class="number">0xfffffffc</span>);    <span class="comment">/// 全局句柄表  不用+0x18的偏移</span></span><br><span class="line">		<span class="keyword">if</span> (!<span class="built_in">strncmp</span>((<span class="keyword">char</span>*)(Process + <span class="number">0x174</span>), (<span class="keyword">char</span>*)(Pro + <span class="number">0x174</span>), <span class="built_in">strlen</span>((<span class="keyword">char</span>*)(Process + <span class="number">0x174</span>))))</span><br><span class="line">		&#123;</span><br><span class="line">			DbgPrint(<span class="string">&quot;PID: %d\n&quot;</span>, i);</span><br><span class="line">			DbgPrint(<span class="string">&quot;Find Process: %s\n&quot;</span>, (<span class="keyword">char</span>*)(Pro + <span class="number">0x174</span>));</span><br><span class="line">			PID = i;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (PID == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		DbgPrint(<span class="string">&quot;未找到对应进程 ....错误\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> FALSE;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	HANDLE handle = <span class="literal">NULL</span>;</span><br><span class="line">	CLIENT_ID client_id;</span><br><span class="line">	client_id.UniqueProcess = (HANDLE)PID;</span><br><span class="line">	client_id.UniqueThread = (HANDLE)<span class="number">0</span>;</span><br><span class="line">	OBJECT_ATTRIBUTES attr = &#123; <span class="keyword">sizeof</span>(OBJECT_ATTRIBUTES), <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line">	attr.Attributes = <span class="number">0</span>;</span><br><span class="line">	NTSTATUS ret = NtOpenProcess(&amp;handle, PROCESS_ALL_ACCESS, &amp;attr, &amp;client_id);</span><br><span class="line">	<span class="keyword">if</span> (!NT_SUCCESS(ret))</span><br><span class="line">	&#123;</span><br><span class="line">		DbgPrint(<span class="string">&quot;NtOpenProcess 打开进程失败\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> FALSE;</span><br><span class="line">	&#125;</span><br><span class="line">	ZwTerminateProcess(handle, <span class="number">0</span>);</span><br><span class="line">	ZwClose(handle);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">VOID <span class="title">FindAllProcess</span><span class="params">(<span class="keyword">char</span>* name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	</span><br><span class="line">	ULONG curProcess;</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		mov eax, dword ptr fs : [<span class="number">0x124</span>] ; </span><br><span class="line">		mov ecx, [eax + <span class="number">0x44</span>]; </span><br><span class="line">		mov curProcess, ecx;</span><br><span class="line">	&#125;</span><br><span class="line">	PLIST_ENTRY plistProcess = (PLIST_ENTRY)(curProcess + <span class="number">0x88</span>); <span class="comment">// _EPROCESS</span></span><br><span class="line">	<span class="comment">//DbgPrint(&quot;curProcess : %X\n&quot;, curProcess);</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (plistProcess-&gt;Flink != (PLIST_ENTRY)(curProcess + <span class="number">0x88</span>))</span><br><span class="line">	&#123;</span><br><span class="line">		</span><br><span class="line">		ULONG nextProcess = ((ULONG)(plistProcess)) - <span class="number">0x88</span>; <span class="comment">// 每次通过链表得到的地址是下一个进程链表的地址 </span></span><br><span class="line">		plistProcess = plistProcess-&gt;Flink;</span><br><span class="line">		<span class="comment">//DbgPrint(&quot;%s\n&quot;, (char*)(nextProcess + 0x174));</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span> (FindPidTable(nextProcess, name))</span><br><span class="line">		&#123;</span><br><span class="line">			DbgPrint(<span class="string">&quot;进程[%s]打开了[%s]的句柄\n&quot;</span>, (<span class="keyword">char</span>*)(nextProcess + <span class="number">0x174</span>), name);</span><br><span class="line">			DbgPrint(<span class="string">&quot;正在结束该进程...\n&quot;</span>);</span><br><span class="line">			<span class="keyword">if</span> (CloseProcess(nextProcess))</span><br><span class="line">			&#123;</span><br><span class="line">				DbgPrint(<span class="string">&quot;进程已被结束...\n&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				DbgPrint(<span class="string">&quot;关闭进程失败\n&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">VOID <span class="title">ThreadFunc</span><span class="params">(PVOID StartContext)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	DbgPrint(<span class="string">&quot;Create Thread Success\n&quot;</span>);</span><br><span class="line">	LARGE_INTEGER timer = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	timer.QuadPart = - <span class="number">10</span> * <span class="number">1000</span> * <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (FLAG)</span><br><span class="line">	&#123;</span><br><span class="line">		KeDelayExecutionThread(KernelMode, FALSE, &amp;timer);</span><br><span class="line">		FindAllProcess(<span class="string">&quot;test.exe&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	DbgPrint(<span class="string">&quot;Thread End End End\n&quot;</span>);</span><br><span class="line">	ZwClose(hThread);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">VOID <span class="title">DriverUnload</span><span class="params">(PDRIVER_OBJECT driver)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	DbgPrint(<span class="string">&quot;卸载了\n&quot;</span>);</span><br><span class="line">	FLAG = FALSE;</span><br><span class="line"></span><br><span class="line">	LARGE_INTEGER timer = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	timer.QuadPart = <span class="number">-30</span> * <span class="number">1000</span> * <span class="number">1000</span>;</span><br><span class="line">	KeDelayExecutionThread(KernelMode, FALSE, &amp;timer);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">NTSTATUS <span class="title">DriverEntry</span><span class="params">(PDRIVER_OBJECT driver, PUNICODE_STRING reg_path)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	driver-&gt;DriverUnload = DriverUnload;</span><br><span class="line">	DbgPrint(<span class="string">&quot;加载了\n&quot;</span>);</span><br><span class="line">	PsCreateSystemThread(&amp;hThread, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, ThreadFunc, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">return</span> STATUS_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/08/20/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%8F%A5%E6%9F%84%E8%A1%A8/" data-id="ckui11bkp001wxt850w7ae2mu" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
+
+    </footer>
+  </div>
+  
+  
+<nav id="article-nav">
+  
+    <a href="/2021/08/26/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91APC&DPC%E7%9B%B8%E5%85%B3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          【火哥学习笔记】APC&amp;DPC相关
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/07/17/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%B3%BB%E7%BB%9FAPI%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">【火哥学习笔记】系统API调用过程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">欢迎纱布们的到来</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>42</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>5</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="" target="_blank" title="">
+          
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>友情链接</h2>
+      
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="zhiaowei魏姐姐">
+          zhiaowei魏姐姐
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="l0x1c源哥">
+          l0x1c源哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="Izaiahsun孙神">
+          Izaiahsun孙神
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://panda0s.top/" target="_blank" title="panda0s无名师傅">
+          panda0s无名师傅
+        </a>
+      
+        <a class="hvr-bounce-in" href="darkeyer.github.io/" target="_blank" title="Darkeyer曦曦哥哥">
+          Darkeyer曦曦哥哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="freek3r.github.io/" target="_blank" title="freek3r艾总">
+          freek3r艾总
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://minhal.me/" target="_blank" title="Minhal学长">
+          Minhal学长
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2020 - 2021 Papaya<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">归档</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

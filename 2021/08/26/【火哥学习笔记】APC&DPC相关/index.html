@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【火哥学习笔记】APC&amp;DPC相关 | 欢迎纱布们的到来</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【火哥学习笔记】APC&amp;DPC相关">
+<meta property="og:url" content="http://example.com/2021/08/26/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91APC&DPC%E7%9B%B8%E5%85%B3/index.html">
+<meta property="og:site_name" content="欢迎纱布们的到来">
+<meta property="og:description" content="​">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-26T13:22:52.000Z">
+<meta property="article:modified_time" content="2021-08-29T03:42:50.000Z">
+<meta property="article:author" content="Papaya">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="欢迎纱布们的到来" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/pig.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>42</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>5</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-【火哥学习笔记】APC&amp;DPC相关" class="wow slideInRight article article-type-post"
+  itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/08/26/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91APC&DPC%E7%9B%B8%E5%85%B3/" class="article-date">
+  <time class="post-time" datetime="2021-08-26T13:22:52.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">26</span>
+  </time>
+</a>
+
+  </div>
+  <div class="article-inner">
+    
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      【火哥学习笔记】APC&amp;DPC相关
+    </h1>
+  
+
+      <div>
+        
+        
+        
+
+        
+      </div>
+    </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      <p>​    <a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前提到的，使用IDT表将每个中断或异常与处理该中断或异常的服务例程联系起来。直观的体验就是中断或异常产生就立即停止当前代码去执行相关的服务例程，但是中断与中断之间也有优先级。</p>
+<p>更具体内容见《WINDOWS内核原理与实现》p49</p>
+<h2 id="IRQL-中断请求级别"><a href="#IRQL-中断请求级别" class="headerlink" title="IRQL 中断请求级别"></a>IRQL 中断请求级别</h2><p>Windows规定了一套软件中断优先级，政委中断请求级别（IRQL，Interrupt Request Level）。使用0~31的数值来表示IRQL，数值越大，优先等级越高。处理器在运行的时候总是有一个当前IRQL，如果遇到中断的IRQL小于等于当前级别，就屏蔽该中断，直到处理器的IRQL被降下来为止。IRQL=0表示普通线程，称为PASSIVE_LEVEL或者被动级别，它优先级最低可以被任何其他级别的中断打断。IRQL=1表示<strong>异步过程调用（APC，Asynchronous Procedure Call）</strong> ，称为APC_LEVEL。IRQL=2表示处理器正在做以下两件事情之一：一、正在进行线程调度，比如切换为新的线程；二、正在处理一个硬件中断的后半部分（不是很紧急的部分），在windows中，这被称为<strong>延迟过程调用（DPC，Deferred Procedure Call）</strong> 。</p>
+<h2 id="APC-异步过程调用"><a href="#APC-异步过程调用" class="headerlink" title="APC 异步过程调用"></a>APC 异步过程调用</h2><p>APC是线程相关的例程，只能在特定的线程环境中被执行，因而也一定在特定的地址空间中被执行。因为级别高于线程本身的指令流，所以很适合于实现各种异步通知事件，例如I/O的完成通知可以用APC来实现。实际上APC在KiServiceExit函数里被执行，而KiServiceExit这个函数是系统调用、异常或中断返回到用户空间的必经之路；其次KiDeliverApc函数也执行APC，它是专门负责执行APC的函数。</p>
+<p>先看看APC相关的结构体</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">ntdll!_KAPC</span><br><span class="line">   +<span class="number">0x000</span> Type             : Int2B</span><br><span class="line">   +<span class="number">0x002</span> Size             : Int2B <span class="comment">// 以上两个都被写死了 Type=0x12 Size=0x30</span></span><br><span class="line">   +<span class="number">0x004</span> Spare0           : Uint4B</span><br><span class="line">   +<span class="number">0x008</span> Thread           : Ptr32 _KTHREAD <span class="comment">// 目标线程 （要被添加APC的线程）</span></span><br><span class="line">   +<span class="number">0x00c</span> ApcListEntry     : _LIST_ENTRY <span class="comment">// _KAPC_STATE中链表所指的地址 -0xc 才能到_APC结构的首地址</span></span><br><span class="line">   +<span class="number">0x014</span> KernelRoutine    : Ptr32     <span class="keyword">void</span> <span class="comment">// 指向一个函数（调用ExFreePoolWithTag 释放APC）</span></span><br><span class="line">   +<span class="number">0x018</span> RundownRoutine   : Ptr32     <span class="keyword">void</span> <span class="comment">// </span></span><br><span class="line">   +<span class="number">0x01c</span> NormalRoutine    : Ptr32     <span class="keyword">void</span> <span class="comment">// 用户APC总入口，或者是真正的内核APC函数</span></span><br><span class="line">   +<span class="number">0x020</span> NormalContext    : Ptr32 Void  <span class="comment">// 是用户APC时，这是真正的APC函数；是内核APC时，这是NULL</span></span><br><span class="line">   +<span class="number">0x024</span> SystemArgument1  : Ptr32 Void <span class="comment">// APC函数的参数</span></span><br><span class="line">   +<span class="number">0x028</span> SystemArgument2  : Ptr32 Void <span class="comment">// APC函数的参数</span></span><br><span class="line">   +<span class="number">0x02c</span> ApcStateIndex    : Char  <span class="comment">// 挂那个队列，0 1 2 3</span></span><br><span class="line">   +<span class="number">0x02d</span> ApcMode          : Char <span class="comment">// =0 内核APC    =1 用户APC</span></span><br><span class="line">   +<span class="number">0x02e</span> Inserted         : UChar <span class="comment">// 该APC是否已经被挂入链表 挂入后置 1</span></span><br><span class="line">       </span><br><span class="line">ntdll!_KAPC_STATE</span><br><span class="line">   +<span class="number">0x000</span> ApcListHead      : [<span class="number">2</span>] _LIST_ENTRY <span class="comment">// 指向_KAPC中 +0xc的位置 下标0:内核APC 和 下标1:用户APC</span></span><br><span class="line">   +<span class="number">0x010</span> Process          : Ptr32 _KPROCESS <span class="comment">// 线程所属或者挂靠的进程</span></span><br><span class="line">   +<span class="number">0x014</span> KernelApcInProgress : UChar <span class="comment">// 内核APC是否正在执行</span></span><br><span class="line">   +<span class="number">0x015</span> KernelApcPending : UChar <span class="comment">// 是否有正在等待执行的内核APC</span></span><br><span class="line">   +<span class="number">0x016</span> UserApcPending   : UChar <span class="comment">// 是否有正在等待执行的用户APC</span></span><br><span class="line">       </span><br><span class="line">nt!_KTHREAD</span><br><span class="line">   +<span class="number">0x034</span> ApcState         : _KAPC_STATE</span><br><span class="line">   +<span class="number">0x138</span> ApcStatePointer  : [<span class="number">2</span>] Ptr32 _KAPC_STATE</span><br><span class="line">   +<span class="number">0x14c</span> SavedApcState    : _KAPC_STATE</span><br><span class="line">   +<span class="number">0x165</span> ApcStateIndex    : UChar</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>APC的大致流程如下：</p>
+<p>1.通过KeInitializeApc取初始化一个APC</p>
+<p>2.调用KeInsertQueueApc-&gt;KiInsertQueueApc将APC挂入到某个线程里</p>
+<p>3.在该线程执行了系统调用、异常或中断后返回到用户空间，检查是否有待执行的APC，有的话调用KiDeliverApc完成所有APC队列任务</p>
+<p>具体细节分析都在idb内，但是分析不是很完全，可以结合wrk看程序流程</p>
+<h2 id="DPC-延迟调用"><a href="#DPC-延迟调用" class="headerlink" title="DPC 延迟调用"></a>DPC 延迟调用</h2><p>DPC的IRQL等级为DISPATCH_LEVEL，高于PASSIVE_LEVEL和APC_LEVEL，因此它优先于任何一个线程相关的函数并且屏蔽了线程调度；同时又低于所有硬件中断。之所以成为延迟，是因为它往往被利用来执行一些相对于当前高优先级的任务（比如硬件中断）来说不那么紧急的事情，从而缩短处理器停留在高IRQL的时间。他的经典用法就是定时器的实现。</p>
+<p>DPC的大致流程与APC相似，相关变量都储存在KPRCB结构体内</p>
+<p>1.通过KeInitializeDpc取初始化一个DPC</p>
+<p>2.调用KeInsertQueueDpc将DPC挂入到某个处理器里</p>
+<p>3.每当CPU的运行级别从DISPATCH_LEVEL或以上降低到DISPATCH_LEVEL以下时，如果有扫描DPC请求队列的要求存在，内核就会扫描DPC请求队列并执行DPC函数。一般是KeLowerIrql函数直接导致触发DPC。同样DPC也有队列，直接循环判断并且执行。</p>
+<p>可以结合wrk看程序流程</p>
+<p>以下是DPC的定时器实现 驱动程序</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ntddk.h&gt;</span></span></span><br><span class="line">KDPC dpc = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">KTIMER ktimer = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">LARGE_INTEGER duetime = &#123; <span class="number">0</span> &#125;;</span><br><span class="line"><span class="function">VOID <span class="title">dpcCall</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ struct _KDPC* Dpc,</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_opt_ PVOID DeferredContext,</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_opt_ PVOID SystemArgument1,</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_opt_ PVOID SystemArgument2</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	DbgPrint(<span class="string">&quot;I&#x27;m DPC \n&quot;</span>);</span><br><span class="line">	KeSetTimer(&amp;ktimer, duetime, &amp;dpc);<span class="comment">// 继续定时器</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function">VOID <span class="title">DriverUnload</span><span class="params">(PDRIVER_OBJECT driver)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	DbgPrint(<span class="string">&quot;卸载了\n&quot;</span>);</span><br><span class="line">	KeCancelTimer(&amp;ktimer);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">NTSTATUS <span class="title">DriverEntry</span><span class="params">(PDRIVER_OBJECT driver, PUNICODE_STRING reg_path)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	driver-&gt;DriverUnload = DriverUnload;</span><br><span class="line">	DbgPrint(<span class="string">&quot;加载了\n&quot;</span>);</span><br><span class="line">	KeInitializeTimer(&amp;ktimer);</span><br><span class="line">	KeInitializeDpc(&amp;dpc, dpcCall, <span class="literal">NULL</span>);</span><br><span class="line">	duetime.QuadPart = <span class="number">-30</span> * <span class="number">1000</span> * <span class="number">1000</span>;</span><br><span class="line">	KeSetTimer(&amp;ktimer, duetime, &amp;dpc); <span class="comment">// 定时器</span></span><br><span class="line">	<span class="keyword">return</span> STATUS_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/08/26/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91APC&DPC%E7%9B%B8%E5%85%B3/" data-id="ckui11bkj001kxt85361t9vx9" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/" rel="tag">windows</a></li></ul>
+
+    </footer>
+  </div>
+  
+  
+<nav id="article-nav">
+  
+    <a href="/2021/09/05/shellcode%E5%88%86%E6%9E%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          shellcode分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/08/20/%E3%80%90%E7%81%AB%E5%93%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%8F%A5%E6%9F%84%E8%A1%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">【火哥学习笔记】句柄表</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">欢迎纱布们的到来</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://i.loli.net/2020/09/25/QDZN6PSqghdjAUR.jpg">
+    <h2 class="author">Papaya</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>42</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>5</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="" target="_blank" title="">
+          
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>友情链接</h2>
+      
+        <a class="hvr-bounce-in" href="https://zhiaowei.github.io/" target="_blank" title="zhiaowei魏姐姐">
+          zhiaowei魏姐姐
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://l0x1c.github.io/" target="_blank" title="l0x1c源哥">
+          l0x1c源哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://www.izaiahsun.com/" target="_blank" title="Izaiahsun孙神">
+          Izaiahsun孙神
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://panda0s.top/" target="_blank" title="panda0s无名师傅">
+          panda0s无名师傅
+        </a>
+      
+        <a class="hvr-bounce-in" href="darkeyer.github.io/" target="_blank" title="Darkeyer曦曦哥哥">
+          Darkeyer曦曦哥哥
+        </a>
+      
+        <a class="hvr-bounce-in" href="freek3r.github.io/" target="_blank" title="freek3r艾总">
+          freek3r艾总
+        </a>
+      
+        <a class="hvr-bounce-in" href="https://minhal.me/" target="_blank" title="Minhal学长">
+          Minhal学长
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2020 - 2021 Papaya<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">归档</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
